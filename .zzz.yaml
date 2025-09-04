@@ -13,7 +13,6 @@ ext:
 - rs
 - proto
 - json
-- ts
 lang: rust
 enablerun: true
 action:
