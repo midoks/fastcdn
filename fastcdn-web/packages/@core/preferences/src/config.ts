@@ -64,6 +64,7 @@ const defaultPreferences: Preferences = {
         enable: true,
         fit: 'contain',
         source: 'https://unpkg.com/@vbenjs/static-source@0.1.7/source/logo-v1.webp',
+        width: 42,
     },
     navigation: {
         accordion: true,
@@ -89,8 +90,8 @@ const defaultPreferences: Preferences = {
         extraCollapsedWidth: 60,
         fixedButton: true,
         hidden: false,
-        mixedWidth: 170,
-        width: 180
+        mixedWidth: 180,
+        width: 224
     },
     tabbar: {
         draggable: true,
