@@ -79,4 +79,3 @@ vite.config.ts.*
 /fastcdn/public/index.html
 /fastcdn/public/static
 /fastcdn/public/favicon.ico
-/fastcdn-web/packages/*
