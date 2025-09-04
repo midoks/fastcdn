@@ -1,0 +1,26 @@
+[package]
+name = "fastcdn"
+version = "0.1.0"
+edition = "2024"
+
+[build-dependencies]
+tonic-build = "0.12"
+
+[dependencies]
+mini-redis = "0.4.1"
+tokio = "1.46.1"
+actix-web = "4.9"
+mime_guess = "2.0"
+rust-embed = "8.7"
+serde = { version = "1.0", features = ["derive"] }
+env_logger = "0.10"
+clap = { version = "4.0", features = ["derive"] }
+# gRPC dependencies
+tonic = "0.12"
+prost = "0.13"
+http = "1.0"
+# 共享RPC客户端
+fastcdn-common = { path = "../fastcdn-common" }
+serde_yaml = "0.9.34"
+lazy_static = "1.4"
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "mysql", "chrono"] }

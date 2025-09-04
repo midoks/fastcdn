@@ -1,0 +1,37 @@
+dev: false
+title: zzz
+frequency: 3
+dirfilter:
+- tmp
+- .git
+- public
+- scripts
+- target
+- logs
+- templates
+ext:
+- rs
+- proto
+- json
+lang: rust
+enablerun: true
+action:
+  before:
+  - echo "before"
+  after:
+  - ./build_web.sh
+  # - ./target/release/fastcdn-api setup --protocol=http --host=127.0.0.1 --port 10001
+  - ./target/release/fastcdn-api start -d
+  - ./target/release/fastcdn start &
+  - ./target/release/fastcdn test
+  # - ./target/release/fastcdn-node start -d
+  exit:
+  - ./target/release/fastcdn stop
+  - ./target/release/fastcdn-api stop
+  # - ./target/release/fastcdn-node stop
+  - rm -rf ./target/release/fastcdn
+  - rm -rf ./target/release/fastcdn-api
+  - rm -rf ./target/release/fastcdn-node
+  # 生成工作空间文档
+  # cargo doc --workspace --open
+link: https://github.com/midoks/zzz
