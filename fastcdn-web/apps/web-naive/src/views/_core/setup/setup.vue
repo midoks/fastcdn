@@ -46,9 +46,6 @@ const steps = computed(() => [
 
 
 
-
-
-
 // 下一步
 function nextStep() {
   if (currentStep.value < totalSteps) {

@@ -107,7 +107,7 @@ const coreRoutes: RouteRecordRaw[] = [
     {
         name: 'Setup',
         path: '/setup',
-        component: () => import('#/layouts/auth.vue'),
+        component: () => import('#/layouts/setup.vue'),
         meta: {
             title: $t('page.auth.setup.title'),
         },
