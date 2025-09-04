@@ -193,7 +193,10 @@ const slots: SetupContext['slots'] = useSlots();
 const headerSlots = computed(() => {
     return Object.keys(slots).filter((key) => key.startsWith('header-'));
 });
+
+console.log(preferences);
 </script>
+
 
 <template>
     <VbenAdminLayout
