@@ -73,6 +73,7 @@ vite.config.ts.*
 *.sw?
 .history
 
+*.*.sh
 *.pid
 /fastcdn-web/node_modules
 /fastcdn/public/index.html
