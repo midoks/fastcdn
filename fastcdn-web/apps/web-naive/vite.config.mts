@@ -1,5 +1,6 @@
 import { defineConfig } from '@vben/vite-config';
 import type { UserConfig } from 'vite';
+import { resolve } from 'node:path';
 
 interface ConfigReturn {
     application: Record<string, any>;
@@ -10,6 +11,11 @@ const config: ReturnType<typeof defineConfig> = defineConfig(async (): Promise<C
     return {
         application: {},
         vite: {
+            resolve: {
+                alias: {
+                    '#': resolve(__dirname, './src'),
+                },
+            },
             build: {
                 rollupOptions: {
                     output: {
