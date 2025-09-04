@@ -116,7 +116,7 @@ const coreRoutes: RouteRecordRaw[] = [
                 name: 'SetupIndex',
                 path: '',
                 component: () =>
-                    import('#/views/_core/authentication/setup.vue'),
+                    import('#/views/_core/setup/setup.vue'),
                 meta: {
                     title: $t('page.auth.setup.title'),
                 },
