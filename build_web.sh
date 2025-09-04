@@ -17,5 +17,6 @@ cp -f apps/web-naive/dist.zip ../fastcdn/public/dist.zip
 cd ../fastcdn/public
 unzip -o dist.zip -d ./ 
 
+rm -rf ../fastcdn-web/apps/web-naive/dist.zip
 
 echo "web pnpm build end"
