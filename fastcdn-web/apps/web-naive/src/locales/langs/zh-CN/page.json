@@ -4,7 +4,70 @@
         "register": "注册",
         "codeLogin": "验证码登录",
         "qrcodeLogin": "二维码登录",
-        "forgetPassword": "忘记密码"
+        "forgetPassword": "忘记密码",
+        "install": "安装",
+        "installTitle": "系统安装",
+        "installDescription": "欢迎使用 FastCDN，请完成系统初始化配置",
+        "installWelcome": "欢迎使用 FastCDN",
+        "installSubtitle": "快速、可靠的内容分发网络解决方案",
+        "installButton": "开始安装",
+        "installComplete": "安装完成",
+        "setup": {
+            "title": "系统安装",
+            "description": "感谢您选择使用FastCDN系统，下面让我们一起开始配置系统。",
+            "steps": {
+                "introduction": "介绍",
+                "apiConfig": "设置API节点",
+                "database": "设置MySQL数据库",
+                "admin": "设置管理员账号",
+                "complete": "完成安装"
+            },
+            "step1": {
+                "title": "介绍",
+                "welcome": "感谢您选择使用GoEdge CDN系统，下面让我们一起开始配置系统。",
+                "requirements": "在安装之前如果您还没有可用的MySQL数据库（支持MySQL 5.7.8/8.0/8.1/TiDB 3.0及以上版本），请先安装MySQL数据库。",
+                "disclaimer": "免责声明：GoEdge软件开发者并不对您的软件使用方法、服务对象、服务内容负责或承担上述责任；在使用本软件产生的一切法律风险自负；",
+                "agreement": "用户协议：请在遵守中华人民共和国政策、法律、法规的前提下使用本软件；自觉承担因不当使用本软件产生的一切法律后果；承认GoEdge开发者拥有本软件的所有著作权；点击'开始'安装表示您同意用户协议。"
+            },
+            "step2": {
+                "title": "设置API节点",
+                "description": "配置API服务器连接信息",
+                "host": "API主机地址",
+                "port": "API端口",
+                "protocol": "协议类型"
+            },
+            "step3": {
+                "title": "设置MySQL数据库",
+                "description": "配置数据库连接信息",
+                "host": "数据库主机",
+                "port": "数据库端口",
+                "name": "数据库名称",
+                "username": "数据库用户名",
+                "password": "数据库密码",
+                "testConnection": "测试连接"
+            },
+            "step4": {
+                "title": "设置管理员账号",
+                "description": "创建系统管理员账户",
+                "username": "管理员用户名",
+                "password": "管理员密码",
+                "confirmPassword": "确认密码",
+                "email": "邮箱地址"
+            },
+            "step5": {
+                "title": "完成安装",
+                "success": "恭喜！系统安装完成",
+                "description": "您现在可以使用管理员账户登录系统了",
+                "loginButton": "立即登录"
+            },
+            "buttons": {
+                "previous": "上一步",
+                "next": "下一步",
+                "start": "开始",
+                "install": "安装",
+                "finish": "完成"
+            }
+        }
     },
     "dashboard": {
         "title": "概览",

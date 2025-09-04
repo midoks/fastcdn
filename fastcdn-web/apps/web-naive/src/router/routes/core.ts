@@ -93,6 +93,34 @@ const coreRoutes: RouteRecordRaw[] = [
                     title: $t('page.auth.register'),
                 },
             },
+            {
+                name: 'Install',
+                path: 'install',
+                component: () =>
+                    import('#/views/_core/authentication/install.vue'),
+                meta: {
+                    title: $t('page.auth.install'),
+                },
+            },
+        ],
+    },
+    {
+        name: 'Setup',
+        path: '/setup',
+        component: () => import('#/layouts/auth.vue'),
+        meta: {
+            title: $t('page.auth.setup.title'),
+        },
+        children: [
+            {
+                name: 'SetupIndex',
+                path: '',
+                component: () =>
+                    import('#/views/_core/authentication/setup.vue'),
+                meta: {
+                    title: $t('page.auth.setup.title'),
+                },
+            },
         ],
     },
 ];

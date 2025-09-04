@@ -89,8 +89,8 @@ const defaultPreferences: Preferences = {
         extraCollapsedWidth: 60,
         fixedButton: true,
         hidden: false,
-        mixedWidth: 80,
-        width: 224,
+        mixedWidth: 170,
+        width: 180
     },
     tabbar: {
         draggable: true,
