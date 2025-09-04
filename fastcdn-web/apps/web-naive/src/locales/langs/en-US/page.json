@@ -24,9 +24,9 @@
             },
             "step1": {
                 "title": "Introduction",
-                "welcome": "Thank you for choosing GoEdge CDN system, let's start configuring the system together.",
+                "welcome": "Thank you for choosing FastCDN system, let's start configuring the system together.",
                 "requirements": "Before installation, if you don't have an available MySQL database (supports MySQL 5.7.8/8.0/8.1/TiDB 3.0 and above), please install MySQL database first.",
-                "disclaimer": "Disclaimer: GoEdge software developers are not responsible for your software usage methods, service objects, and service content; you bear all legal risks arising from using this software;",
+                "disclaimer": "Disclaimer: FastCDN software developers are not responsible for your software usage methods, service objects, and service content; you bear all legal risks arising from using this software;",
                 "agreement": "User Agreement: Please use this software under the premise of complying with the policies, laws, and regulations of the People's Republic of China; consciously bear all legal consequences arising from improper use of this software; acknowledge that GoEdge developers own all copyrights of this software; clicking 'Start' installation indicates that you agree to the user agreement."
             },
             "step2": {
