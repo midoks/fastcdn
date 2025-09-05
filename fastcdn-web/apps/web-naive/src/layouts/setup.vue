@@ -143,7 +143,7 @@ function goToLogin() {
             </div>
 
             <!-- 内容区域 -->
-            <div style="background-color: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <div style="background-color: white; border-radius: 2px; padding: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                 <!-- Step 1: 介绍 -->
                 <div v-if="currentStep === 1" style="margin-bottom: 20px;">
                     <div style="text-align: center; margin-bottom: 20px;">
@@ -179,9 +179,7 @@ function goToLogin() {
 
                 <!-- Step 2: API配置 -->
                 <div v-if="currentStep === 2" style="margin-bottom: 20px;">
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        <p style="color: #666; font-size: 14px;">{{ $t('page.auth.setup.step2.description') }}</p>
-                    </div>
+              
                     
                     <div style="max-width: 400px; margin: 0 auto 20px;">
                         <div style="margin-bottom: 15px;">
