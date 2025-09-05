@@ -117,8 +117,8 @@ function goToLogin() {
                 <div 
                     :style="{
                         display: 'flex',
-                        justify-content: 'center',
-                        align-items: 'center',
+                        justifyContent: 'center',
+                        alignItems: 'center',
                         gap: '0px',
                         border: '1px solid rgba(34, 36, 38, 0.15)'
                     }"
