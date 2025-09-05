@@ -6,7 +6,7 @@ echo "web pnpm build start"
 
 echo $curPath
 
-if [[ -f $curPath/fastcdn-web/apps/web-naive/dist.zip ] or [ -f $curPath/fastcdn/public/dist.zip ]];then
+if [ -f $curPath/fastcdn-web/apps/web-naive/dist.zip ] or [ -f $curPath/fastcdn/public/dist.zip ];then
 	web_md5=`md5sum $curPath/fastcdn-web/apps/web-naive/dist.zip | awk '{print $1}'`
 	fastcdn_public_md5=`md5sum $curPath/fastcdn/public/dist.zip | awk '{print $1}'`
 
