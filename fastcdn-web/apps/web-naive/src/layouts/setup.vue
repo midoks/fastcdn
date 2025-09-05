@@ -17,6 +17,7 @@ const formData = ref({
     apiHost: 'localhost',
     apiPort: 8080,
     apiProtocol: 'http',
+    apiType: 'new',
     
     // Step 3: 数据库配置
     databaseHost: 'localhost',
@@ -189,7 +190,7 @@ function goToLogin() {
                                 <tr>
                                     <td style="width: 140px;padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.auth.setup.step2.api_type') }}</td>
                                     <td style="padding: 8px; border: 1px solid #ddd;">
-                                        <select v-model="formData.apiProtocol" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                        <select v-model="formData.apiType" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
                                             <option value="new">自动启动新API节点</option>
                                             <option value="old">使用已安装节点</option>
                                         </select>
