@@ -21,8 +21,9 @@ const formData = ref({
     // Step 3: 数据库配置
     databaseHost: '127.0.0.1',
     databasePort: 3306,
+
     databaseName: 'fastcdn',
-    databaseUsername: '',
+    databaseUsername: 'root',
     databasePassword: '',
     
     // Step 4: 管理员配置
@@ -300,9 +301,9 @@ function goToLogin() {
                         <p style="color: #666; font-size: 14px;">{{ $t('page.setup.step4.description') }}</p>
                     </div>
                     
-                    <div style="max-width: 400px; margin: 0 auto 20px;">
+                    <div style="max-width: 100%; margin: 0 auto 20px;">
                         <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.setup.step4.username') }}</label>
+                            <label style="width:140px;display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.setup.step4.username') }}</label>
                             <input v-model="formData.adminUsername" type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
                         </div>
                         <div style="margin-bottom: 15px;">
