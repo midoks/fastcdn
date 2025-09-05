@@ -5,6 +5,14 @@
         "codeLogin": "Code Login",
         "qrcodeLogin": "Qr Code Login",
         "forgetPassword": "Forget Password",
+
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "analytics": "Analytics",
+        "workspace": "Workspace"
+    },
+    "setup": {
         "install": "Install",
         "installTitle": "System Installation",
         "installDescription": "Welcome to FastCDN, please complete the system initialization",
@@ -12,66 +20,59 @@
         "installSubtitle": "Fast and reliable content delivery network solution",
         "installButton": "Start Installation",
         "installComplete": "Installation Complete",
-        "setup": {
-            "title": "System Installation",
-            "description": "Thank you for choosing FastCDN system, let's start configuring the system together.",
-            "steps": {
-                "introduction": "Introduction",
-                "apiConfig": "Setup API Node",
-                "database": "Setup MySQL Database",
-                "admin": "Setup Administrator Account",
-                "complete": "Complete Installation"
-            },
-            "step1": {
-                "title": "Introduction",
-                "welcome": "Thank you for choosing FastCDN system, let's start configuring the system together.",
-                "requirements": "Before installation, if you don't have an available MySQL database (supports MySQL 5.7.8/8.0/8.1/TiDB 3.0 and above), please install MySQL database first.",
-                "disclaimer": "Disclaimer: FastCDN software developers are not responsible for your software usage methods, service objects, and service content; you bear all legal risks arising from using this software;",
-                "agreement": "User Agreement: Please use this software under the premise of complying with the policies, laws, and regulations of the People's Republic of China; consciously bear all legal consequences arising from improper use of this software; acknowledge that GoEdge developers own all copyrights of this software; clicking 'Start' installation indicates that you agree to the user agreement."
-            },
-            "step2": {
-                "title": "Setup API Node",
-                "description": "Configure API server connection information",
-                "host": "API Host Address",
-                "port": "API Port",
-                "protocol": "Protocol Type"
-            },
-            "step3": {
-                "title": "Setup MySQL Database",
-                "description": "Configure database connection information",
-                "host": "Database Host",
-                "port": "Database Port",
-                "name": "Database Name",
-                "username": "Database Username",
-                "password": "Database Password",
-                "testConnection": "Test Connection"
-            },
-            "step4": {
-                "title": "Setup Administrator Account",
-                "description": "Create system administrator account",
-                "username": "Administrator Username",
-                "password": "Administrator Password",
-                "confirmPassword": "Confirm Password",
-                "email": "Email Address"
-            },
-            "step5": {
-                "title": "Complete Installation",
-                "success": "Congratulations! System installation completed",
-                "description": "You can now log in to the system with your administrator account",
-                "loginButton": "Login Now"
-            },
-            "buttons": {
-                "previous": "Previous",
-                "next": "Next",
-                "start": "Start",
-                "install": "Install",
-                "finish": "Finish"
-            }
+        "title": "System Installation",
+        "description": "Thank you for choosing FastCDN system, let's start configuring the system together.",
+        "steps": {
+            "introduction": "Introduction",
+            "apiConfig": "Setup API Node",
+            "database": "Setup MySQL Database",
+            "admin": "Setup Administrator Account",
+            "complete": "Complete Installation"
+        },
+        "step1": {
+            "title": "Introduction",
+            "welcome": "Thank you for choosing FastCDN system, let's start configuring the system together.",
+            "requirements": "Before installation, if you don't have an available MySQL database (supports MySQL 5.7.8/8.0/8.1/TiDB 3.0 and above), please install MySQL database first.",
+            "disclaimer": "Disclaimer: FastCDN software developers are not responsible for your software usage methods, service objects, and service content; you bear all legal risks arising from using this software;",
+            "agreement": "User Agreement: Please use this software under the premise of complying with the policies, laws, and regulations of the People's Republic of China; consciously bear all legal consequences arising from improper use of this software; acknowledge that GoEdge developers own all copyrights of this software; clicking 'Start' installation indicates that you agree to the user agreement."
+        },
+        "step2": {
+            "title": "Setup API Node",
+            "description": "Configure API server connection information",
+            "host": "API Host Address",
+            "port": "API Port",
+            "protocol": "Protocol Type"
+        },
+        "step3": {
+            "title": "Setup MySQL Database",
+            "description": "Configure database connection information",
+            "host": "Database Host",
+            "port": "Database Port",
+            "name": "Database Name",
+            "username": "Database Username",
+            "password": "Database Password",
+            "testConnection": "Test Connection"
+        },
+        "step4": {
+            "title": "Setup Administrator Account",
+            "description": "Create system administrator account",
+            "username": "Administrator Username",
+            "password": "Administrator Password",
+            "confirmPassword": "Confirm Password",
+            "email": "Email Address"
+        },
+        "step5": {
+            "title": "Complete Installation",
+            "success": "Congratulations! System installation completed",
+            "description": "You can now log in to the system with your administrator account",
+            "loginButton": "Login Now"
+        },
+        "buttons": {
+            "previous": "Previous",
+            "next": "Next",
+            "start": "Start",
+            "install": "Install",
+            "finish": "Finish"
         }
-    },
-    "dashboard": {
-        "title": "Dashboard",
-        "analytics": "Analytics",
-        "workspace": "Workspace"
     }
 }

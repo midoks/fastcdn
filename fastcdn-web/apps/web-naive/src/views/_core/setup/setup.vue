@@ -14,12 +14,12 @@ const totalSteps = 5;
 // 表单数据
 const formData = ref({
     // Step 2: API配置
-    apiHost: 'localhost',
-    apiPort: 8080,
+    apiHost: '127.0.0.1',
+    apiPort: 10001,
     apiProtocol: 'http',
     
     // Step 3: 数据库配置
-    databaseHost: 'localhost',
+    databaseHost: '127.0.0.1',
     databasePort: 3306,
     databaseName: 'fastcdn',
     databaseUsername: '',
@@ -36,11 +36,11 @@ const formData = ref({
 
 // 步骤配置
 const steps = computed(() => [
-    { key: 'introduction', title: $t('page.auth.setup.steps.introduction') },
-    { key: 'apiConfig', title: $t('page.auth.setup.steps.apiConfig') },
-    { key: 'database', title: $t('page.auth.setup.steps.database') },
-    { key: 'admin', title: $t('page.auth.setup.steps.admin') },
-    { key: 'complete', title: $t('page.auth.setup.steps.complete') }
+    { key: 'introduction', title: $t('page.setup.steps.introduction') },
+    { key: 'apiConfig', title: $t('page.setup.steps.apiConfig') },
+    { key: 'database', title: $t('page.setup.steps.database') },
+    { key: 'admin', title: $t('page.setup.steps.admin') },
+    { key: 'complete', title: $t('page.setup.steps.complete') }
 ]);
 
 
@@ -105,10 +105,10 @@ function goToLogin() {
             <!-- 头部 -->
             <div style="text-align: center; margin-bottom: 30px;">
                 <h2 style="font-size: 28px; color: #333; margin-bottom: 10px;">
-                    {{ $t('page.auth.setup.title') }}
+                    {{ $t('page.setup.title') }}
                 </h2>
                 <p style="color: #666; font-size: 14px;">
-                    {{ $t('page.auth.setup.description') }}
+                    {{ $t('page.setup.description') }}
                 </p>
             </div>
 
@@ -152,20 +152,20 @@ function goToLogin() {
                 <div v-if="currentStep === 1" style="margin-bottom: 20px;">
                     <div style="text-align: center; margin-bottom: 20px;">
                         <h3 style="font-size: 20px; color: #333; margin-bottom: 15px;">
-                            {{ $t('page.auth.setup.step1.title') }}
+                            {{ $t('page.setup.step1.title') }}
                         </h3>
                     </div>
                     
                     <div style="color: #555; line-height: 1.6;">
-                        <p style="margin-bottom: 15px;">{{ $t('page.auth.setup.step1.welcome') }}</p>
-                        <p style="margin-bottom: 15px;">{{ $t('page.auth.setup.step1.requirements') }}</p>
+                        <p style="margin-bottom: 15px;">{{ $t('page.setup.step1.welcome') }}</p>
+                        <p style="margin-bottom: 15px;">{{ $t('page.setup.step1.requirements') }}</p>
                         
                         <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px; padding: 15px; margin-bottom: 15px;">
-                            <p style="font-size: 14px; margin: 0;">{{ $t('page.auth.setup.step1.disclaimer') }}</p>
+                            <p style="font-size: 14px; margin: 0;">{{ $t('page.setup.step1.disclaimer') }}</p>
                         </div>
                         
                         <div style="background-color: #d1ecf1; border: 1px solid #bee5eb; border-radius: 4px; padding: 15px; margin-bottom: 20px;">
-                            <p style="font-size: 14px; margin: 0;">{{ $t('page.auth.setup.step1.agreement') }}</p>
+                            <p style="font-size: 14px; margin: 0;">{{ $t('page.setup.step1.agreement') }}</p>
                         </div>
                     </div>
                     
@@ -176,7 +176,7 @@ function goToLogin() {
                             @mouseover="$event.target.style.backgroundColor='#0056b3'"
                             @mouseout="$event.target.style.backgroundColor='#007bff'"
                         >
-                            {{ $t('page.auth.setup.buttons.start') }}
+                            {{ $t('page.setup.buttons.start') }}
                         </button>
                     </div>
                 </div>
@@ -185,22 +185,22 @@ function goToLogin() {
                 <div v-if="currentStep === 2" style="margin-bottom: 20px;">
                     <div style="text-align: center; margin-bottom: 20px;">
                         <h3 style="font-size: 20px; color: #333; margin-bottom: 10px;">
-                            {{ $t('page.auth.setup.step2.title') }}
+                            {{ $t('page.setup.step2.title') }}
                         </h3>
-                        <p style="color: #666; font-size: 14px;">{{ $t('page.auth.setup.step2.description') }}</p>
+                        <p style="color: #666; font-size: 14px;">{{ $t('page.setup.step2.description') }}</p>
                     </div>
                     
                     <div style="max-width: 400px; margin: 0 auto 20px;">
                         <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step2.host') }}</label>
+                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.setup.step2.host') }}</label>
                             <input v-model="formData.apiHost" type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
                         </div>
                         <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step2.port') }}</label>
+                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.setup.step2.port') }}</label>
                             <input v-model="formData.apiPort" type="number" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
                         </div>
                         <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step2.protocol') }}</label>
+                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.setup.step2.protocol') }}</label>
                             <select v-model="formData.apiProtocol" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
                                 <option value="http">HTTP</option>
                                 <option value="https">HTTPS</option>
@@ -215,7 +215,7 @@ function goToLogin() {
                             @mouseover="$event.target.style.backgroundColor='#545b62'"
                             @mouseout="$event.target.style.backgroundColor='#6c757d'"
                         >
-                            {{ $t('page.auth.setup.buttons.previous') }}
+                            {{ $t('page.setup.buttons.previous') }}
                         </button>
                         <button
                             @click="nextStep"
@@ -223,7 +223,7 @@ function goToLogin() {
                             @mouseover="$event.target.style.backgroundColor='#0056b3'"
                             @mouseout="$event.target.style.backgroundColor='#007bff'"
                         >
-                            {{ $t('page.auth.setup.buttons.next') }}
+                            {{ $t('page.setup.buttons.next') }}
                         </button>
                     </div>
                 </div>
@@ -232,30 +232,30 @@ function goToLogin() {
                 <div v-if="currentStep === 3" style="margin-bottom: 20px;">
                     <div style="text-align: center; margin-bottom: 20px;">
                         <h3 style="font-size: 20px; color: #333; margin-bottom: 10px;">
-                            {{ $t('page.auth.setup.step3.title') }}
+                            {{ $t('page.setup.step3.title') }}
                         </h3>
-                        <p style="color: #666; font-size: 14px;">{{ $t('page.auth.setup.step3.description') }}</p>
+                        <p style="color: #666; font-size: 14px;">{{ $t('page.setup.step3.description') }}</p>
                     </div>
                     
                     <div style="max-width: 400px; margin: 0 auto 20px;">
                         <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step3.host') }}</label>
+                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.setup.step3.host') }}</label>
                             <input v-model="formData.databaseHost" type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
                         </div>
                         <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step3.port') }}</label>
+                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.setup.step3.port') }}</label>
                             <input v-model="formData.databasePort" type="number" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
                         </div>
                         <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step3.database') }}</label>
+                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.setup.step3.database') }}</label>
                             <input v-model="formData.databaseName" type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
                         </div>
                         <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step3.username') }}</label>
+                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.setup.step3.username') }}</label>
                             <input v-model="formData.databaseUsername" type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
                         </div>
                         <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step3.password') }}</label>
+                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.setup.step3.password') }}</label>
                             <input v-model="formData.databasePassword" type="password" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
                         </div>
                         
@@ -266,7 +266,7 @@ function goToLogin() {
                                 @mouseover="$event.target.style.backgroundColor='#218838'"
                                 @mouseout="$event.target.style.backgroundColor='#28a745'"
                             >
-                                {{ $t('page.auth.setup.step3.testConnection') }}
+                                {{ $t('page.setup.step3.testConnection') }}
                             </button>
                         </div>
                     </div>
@@ -278,7 +278,7 @@ function goToLogin() {
                             @mouseover="$event.target.style.backgroundColor='#545b62'"
                             @mouseout="$event.target.style.backgroundColor='#6c757d'"
                         >
-                            {{ $t('page.auth.setup.buttons.previous') }}
+                            {{ $t('page.setup.buttons.previous') }}
                         </button>
                         <button
                             @click="nextStep"
@@ -286,7 +286,7 @@ function goToLogin() {
                             @mouseover="$event.target.style.backgroundColor='#0056b3'"
                             @mouseout="$event.target.style.backgroundColor='#007bff'"
                         >
-                            {{ $t('page.auth.setup.buttons.next') }}
+                            {{ $t('page.setup.buttons.next') }}
                         </button>
                     </div>
                 </div>
@@ -295,26 +295,26 @@ function goToLogin() {
                 <div v-if="currentStep === 4" style="margin-bottom: 20px;">
                     <div style="text-align: center; margin-bottom: 20px;">
                         <h3 style="font-size: 20px; color: #333; margin-bottom: 10px;">
-                            {{ $t('page.auth.setup.step4.title') }}
+                            {{ $t('page.setup.step4.title') }}
                         </h3>
-                        <p style="color: #666; font-size: 14px;">{{ $t('page.auth.setup.step4.description') }}</p>
+                        <p style="color: #666; font-size: 14px;">{{ $t('page.setup.step4.description') }}</p>
                     </div>
                     
                     <div style="max-width: 400px; margin: 0 auto 20px;">
                         <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step4.username') }}</label>
+                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.setup.step4.username') }}</label>
                             <input v-model="formData.adminUsername" type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
                         </div>
                         <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step4.password') }}</label>
+                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.setup.step4.password') }}</label>
                             <input v-model="formData.adminPassword" type="password" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
                         </div>
                         <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step4.confirmPassword') }}</label>
+                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.setup.step4.confirmPassword') }}</label>
                             <input v-model="formData.adminConfirmPassword" type="password" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
                         </div>
                         <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step4.email') }}</label>
+                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.setup.step4.email') }}</label>
                             <input v-model="formData.adminEmail" type="email" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
                         </div>
                     </div>
@@ -326,7 +326,7 @@ function goToLogin() {
                             @mouseover="$event.target.style.backgroundColor='#545b62'"
                             @mouseout="$event.target.style.backgroundColor='#6c757d'"
                         >
-                            {{ $t('page.auth.setup.buttons.previous') }}
+                            {{ $t('page.setup.buttons.previous') }}
                         </button>
                         <button
                             @click="completeInstallation"
@@ -336,7 +336,7 @@ function goToLogin() {
                             @mouseout="$event.target.style.backgroundColor='#007bff'"
                         >
                             <span v-if="loading">安装中...</span>
-                            <span v-else>{{ $t('page.auth.setup.buttons.install') }}</span>
+                            <span v-else>{{ $t('page.setup.buttons.install') }}</span>
                         </button>
                     </div>
                 </div>
@@ -351,9 +351,9 @@ function goToLogin() {
                     
                     <div style="margin-bottom: 20px;">
                         <h3 style="font-size: 24px; font-weight: bold; color: #333; margin-bottom: 10px;">
-                            {{ $t('page.auth.setup.step5.success') }}
+                            {{ $t('page.setup.step5.success') }}
                         </h3>
-                        <p style="color: #666; font-size: 14px;">{{ $t('page.auth.setup.step5.description') }}</p>
+                        <p style="color: #666; font-size: 14px;">{{ $t('page.setup.step5.description') }}</p>
                     </div>
                     
                     <button
@@ -362,7 +362,7 @@ function goToLogin() {
                         @mouseover="$event.target.style.backgroundColor='#0056b3'"
                         @mouseout="$event.target.style.backgroundColor='#007bff'"
                     >
-                        {{ $t('page.auth.setup.step5.loginButton') }}
+                        {{ $t('page.setup.step5.loginButton') }}
                     </button>
                 </div>
             </div>
