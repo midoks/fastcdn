@@ -27,7 +27,7 @@ const formData = ref({
     databasePassword: '',
     
     // Step 4: 管理员配置
-    adminUsername: '',
+    adminUsername: 'admin',
     adminPassword: '',
     confirmPassword: '',
     adminEmail: ''
@@ -329,17 +329,11 @@ function goToLogin() {
                 <!-- Step 4: 管理员配置 -->
                 <div v-if="currentStep === 4" style="margin-bottom: 20px;">
                     
-                    <div style="max-width: 600px; margin: 0 auto 20px;">
+                    <div style="max-width: 100%; margin: 0 auto 20px;">
                         <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd;">
-                            <thead>
-                                <tr style="background-color: #f8f9fa;">
-                                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd; color: #333; font-size: 14px; font-weight: bold;">配置项</th>
-                                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd; color: #333; font-size: 14px; font-weight: bold;">值</th>
-                                </tr>
-                            </thead>
                             <tbody>
                                 <tr>
-                                    <td style="padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.setup.step4.username') }}</td>
+                                    <td style="width:140px;padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.setup.step4.username') }}</td>
                                     <td style="padding: 8px; border: 1px solid #ddd;">
                                         <input v-model="formData.adminUsername" type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
                                     </td>
