@@ -109,7 +109,7 @@ const coreRoutes: RouteRecordRaw[] = [
         path: '/setup',
         component: () => import('#/layouts/setup.vue'),
         meta: {
-            title: $t('page.auth.setup.title'),
+            title: $t('page.setup.title'),
         },
         children: [
             {
@@ -118,7 +118,7 @@ const coreRoutes: RouteRecordRaw[] = [
                 component: () =>
                     import('#/views/_core/setup/setup.vue'),
                 meta: {
-                    title: $t('page.auth.setup.title'),
+                    title: $t('page.setup.title'),
                 },
             },
         ],
