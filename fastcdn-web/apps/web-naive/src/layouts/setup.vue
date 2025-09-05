@@ -243,31 +243,48 @@ function goToLogin() {
 
                 <!-- Step 3: 数据库配置 -->
                 <div v-if="currentStep === 3" style="margin-bottom: 20px;">
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        <p style="color: #666; font-size: 14px;">{{ $t('page.auth.setup.step3.description') }}</p>
-                    </div>
                     
-                    <div style="max-width: 400px; margin: 0 auto 20px;">
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step3.host') }}</label>
-                            <input v-model="formData.databaseHost" type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step3.port') }}</label>
-                            <input v-model="formData.databasePort" type="number" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step3.database') }}</label>
-                            <input v-model="formData.databaseName" type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step3.username') }}</label>
-                            <input v-model="formData.databaseUsername" type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step3.password') }}</label>
-                            <input v-model="formData.databasePassword" type="password" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
-                        </div>
+                    <div style="max-width: 600px; margin: 0 auto 20px;">
+                        <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd; margin-bottom: 20px;">
+                            <thead>
+                                <tr style="background-color: #f8f9fa;">
+                                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd; color: #333; font-size: 14px; font-weight: bold;">配置项</th>
+                                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd; color: #333; font-size: 14px; font-weight: bold;">值</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.auth.setup.step3.host') }}</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">
+                                        <input v-model="formData.databaseHost" type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.auth.setup.step3.port') }}</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">
+                                        <input v-model="formData.databasePort" type="number" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.auth.setup.step3.database') }}</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">
+                                        <input v-model="formData.databaseName" type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.auth.setup.step3.username') }}</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">
+                                        <input v-model="formData.databaseUsername" type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.auth.setup.step3.password') }}</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">
+                                        <input v-model="formData.databasePassword" type="password" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                         
                         <div style="margin-top: 15px;">
                             <button
@@ -303,27 +320,36 @@ function goToLogin() {
 
                 <!-- Step 4: 管理员配置 -->
                 <div v-if="currentStep === 4" style="margin-bottom: 20px;">
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        <p style="color: #666; font-size: 14px;">{{ $t('page.auth.setup.step4.description') }}</p>
-                    </div>
                     
-                    <div style="max-width: 400px; margin: 0 auto 20px;">
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step4.username') }}</label>
-                            <input v-model="formData.adminUsername" type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step4.password') }}</label>
-                            <input v-model="formData.adminPassword" type="password" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step4.confirmPassword') }}</label>
-                            <input v-model="formData.confirmPassword" type="password" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; color: #333; font-size: 14px;">{{ $t('page.auth.setup.step4.email') }}</label>
-                            <input v-model="formData.adminEmail" type="email" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
-                        </div>
+                    <div style="max-width: 600px; margin: 0 auto 20px;">
+                        <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd;">
+                            <thead>
+                                <tr style="background-color: #f8f9fa;">
+                                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd; color: #333; font-size: 14px; font-weight: bold;">配置项</th>
+                                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd; color: #333; font-size: 14px; font-weight: bold;">值</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.auth.setup.step4.username') }}</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">
+                                        <input v-model="formData.adminUsername" type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.auth.setup.step4.password') }}</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">
+                                        <input v-model="formData.adminPassword" type="password" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.auth.setup.step4.confirmPassword') }}</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">
+                                        <input v-model="formData.confirmPassword" type="password" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     
                     <div style="display: flex; justify-content: space-between;">
