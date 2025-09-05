@@ -14,8 +14,8 @@ const totalSteps = 5;
 // 表单数据
 const formData = ref({
     // Step 2: API配置
-    apiHost: 'localhost',
-    apiPort: 8080,
+    apiHost: '127.0.0.1',
+    apiPort: 10001,
     apiProtocol: 'http',
     apiType: 'new',
     
