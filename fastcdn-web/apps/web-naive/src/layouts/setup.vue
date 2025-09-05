@@ -20,7 +20,7 @@ const formData = ref({
     apiType: 'new',
     
     // Step 3: 数据库配置
-    databaseHost: 'localhost',
+    databaseHost: '127.0.0.1',
     databasePort: 3306,
     databaseName: 'fastcdn',
     databaseUsername: '',
