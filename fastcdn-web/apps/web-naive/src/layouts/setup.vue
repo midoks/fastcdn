@@ -190,13 +190,19 @@ function goToLogin() {
                                 <tr>
                                     <td style="width: 140px;padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.auth.setup.step2.api_type') }}</td>
                                     <td style="padding: 8px; border: 1px solid #ddd;">
-                                        <select v-model="formData.apiType" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
-                                            <option value="new">自动启动新API节点</option>
-                                            <option value="old">使用已安装节点</option>
-                                        </select>
+                                        <div style="display: flex; gap: 20px; align-items: center;">
+                                            <label style="display: flex; align-items: center; cursor: pointer;">
+                                                <input v-model="formData.apiType" type="radio" value="new" style="margin-right: 8px;" />
+                                                <span style="font-size: 14px; color: #333;">自动启动新API节点</span>
+                                            </label>
+                                            <label style="display: flex; align-items: center; cursor: pointer;">
+                                                <input v-model="formData.apiType" type="radio" value="old" style="margin-right: 8px;" />
+                                                <span style="font-size: 14px; color: #333;">使用已安装节点</span>
+                                            </label>
+                                        </div>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr v-if="formData.apiType === 'old'">
                                     <td style="padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.auth.setup.step2.protocol') }}</td>
                                     <td style="padding: 8px; border: 1px solid #ddd;">
                                         <select v-model="formData.apiProtocol" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
