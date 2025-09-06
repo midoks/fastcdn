@@ -1,7 +1,6 @@
 use clap::{Parser, Subcommand};
 
 // 引入模块化的Web服务器和RPC客户端
-mod app;
 mod web;
 
 use fastcdn_common::daemon::app::Daemon;

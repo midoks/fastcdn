@@ -1,5 +1,5 @@
 use super::static_handler::StaticHandler;
-use crate::app::api;
+use crate::web::app;
 use actix_web::{App, HttpServer, web};
 
 /// HTTP服务器配置和启动
@@ -23,7 +23,10 @@ impl HttpServerManager {
                             web::resource("/static/{_:.*}")
                                 .route(web::get().to(StaticHandler::handle_static)),
                         )
-                        .service(web::scope("/api").service(api::hello))
+                        .service(web::scope("/api").service(app::api::hello))
+                        .service(web::scope("/setup")
+                            .service(app::setup::db_test_post)
+                            .service(app::setup::db_test_get))
                         .route("/", web::get().to(StaticHandler::index))
                 })
                 .bind(&http_listen)

@@ -50,7 +50,8 @@ export namespace SetupApi {
  * 测试数据库连接
  */
 export async function testDatabaseConnectionApi(data: SetupApi.DatabaseTestParams) {
-  return baseRequestClient.post<SetupApi.DatabaseTestResult>('/setup/test-database', data);
+  console.log(data);
+  return baseRequestClient.post<SetupApi.DatabaseTestResult>('/setup/db_test', data);
 }
 
 /**
