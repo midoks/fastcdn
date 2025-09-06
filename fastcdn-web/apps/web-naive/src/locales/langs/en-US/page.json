@@ -38,9 +38,11 @@
         "step2": {
             "title": "Setup API Node",
             "description": "Configure API server connection information",
-            "host": "API Host Address",
-            "port": "API Port",
-            "protocol": "Protocol Type"
+            "host": "Host Address",
+            "port": "Port",
+            "protocol": "Protocol Type",
+            "node_id": "nodeId",
+            "secret": "ecret"
         },
         "step3": {
             "title": "Setup MySQL Database",

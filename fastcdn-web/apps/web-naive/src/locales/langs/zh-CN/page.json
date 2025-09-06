@@ -39,9 +39,11 @@
             "api_type":"API节点类型",
             "title": "设置API节点",
             "description": "配置API服务器连接信息",
-            "host": "API主机地址",
-            "port": "API端口",
-            "protocol": "协议类型"
+            "host": "主机地址",
+            "port": "服务端口",
+            "protocol": "节点协议",
+            "node_id": "节点nodeId",
+            "secret": "节点secret"
         },
         "step3": {
             "database": "数据库名称",

@@ -223,6 +223,18 @@ function goToLogin() {
                                         <input v-model="formData.apiPort" type="number" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
                                     </td>
                                 </tr>
+                                <tr v-if="formData.apiType === 'old'">
+                                    <td style="padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.setup.step2.node_id') }}</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">
+                                        <input type="number" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
+                                    </td>
+                                </tr>
+                                <tr v-if="formData.apiType === 'old'">
+                                    <td style="padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.setup.step2.secret') }}</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">
+                                        <input type="number" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -252,14 +264,6 @@ function goToLogin() {
                     
                     <div style="max-width: 100%; margin: 0 auto 20px;">
                         <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd; margin-bottom: 20px;">
-                            <!--
-                            <thead>
-                                <tr style="background-color: #f8f9fa;">
-                                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd; color: #333; font-size: 14px; font-weight: bold;">配置项</th>
-                                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd; color: #333; font-size: 14px; font-weight: bold;">值</th>
-                                </tr>
-                            </thead>
-                            -->
                             <tbody>
                                 <tr>
                                     <td style="width:140px;padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.setup.step3.host') }}</td>
