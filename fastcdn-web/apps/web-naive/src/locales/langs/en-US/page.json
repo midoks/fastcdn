@@ -23,9 +23,9 @@
         "description": "Thank you for choosing FastCDN system, let's start configuring the system together.",
         "steps": {
             "introduction": "Introduction",
-            "apiConfig": "Setup API Node",
-            "database": "Setup MySQL Database",
-            "admin": "Setup Administrator Account",
+            "apiConfig": "API Node",
+            "database": "MySQL Database",
+            "admin": "Administrator Account",
             "complete": "Complete Installation"
         },
         "step1": {
