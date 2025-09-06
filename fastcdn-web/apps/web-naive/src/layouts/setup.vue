@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { $t } from '@vben/locales';
@@ -18,6 +18,8 @@ const formData = ref({
     apiPort: 10001,
     apiProtocol: 'http',
     apiType: 'new',
+    nodeId: '',
+    secret: '',
     
     // Step 3: 数据库配置
     databaseHost: '127.0.0.1',
@@ -33,6 +35,15 @@ const formData = ref({
     adminEmail: ''
 });
 
+// 监听apiType变化，当选择"使用已安装节点"时清空相关字段
+watch(() => formData.value.apiType, (newType) => {
+    if (newType === 'old') {
+        formData.value.nodeId = '';
+        formData.value.secret = '';
+        formData.value.apiHost = '';
+        formData.value.apiPort = '';
+    }
+});
 
 
 // 步骤配置
@@ -43,8 +54,6 @@ const steps = computed(() => [
     { key: 'admin', title: $t('page.setup.steps.admin') },
     { key: 'complete', title: $t('page.setup.steps.complete') }
 ]);
-
-
 
 
 // 下一步
@@ -226,13 +235,13 @@ function goToLogin() {
                                 <tr v-if="formData.apiType === 'old'">
                                     <td style="padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.setup.step2.node_id') }}</td>
                                     <td style="padding: 8px; border: 1px solid #ddd;">
-                                        <input type="number" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
+                                        <input v-model="formData.nodeId" type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
                                     </td>
                                 </tr>
                                 <tr v-if="formData.apiType === 'old'">
                                     <td style="padding: 12px; border: 1px solid #ddd; color: #333; font-size: 14px; background-color: #f8f9fa;">{{ $t('page.setup.step2.secret') }}</td>
                                     <td style="padding: 8px; border: 1px solid #ddd;">
-                                        <input type="number" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
+                                        <input v-model="formData.secret" type="text" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
                                     </td>
                                 </tr>
                             </tbody>
