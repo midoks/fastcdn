@@ -18,10 +18,11 @@ if [ -f $curPath/fastcdn-web/apps/web-naive/dist.zip ] or [ -f $curPath/fastcdn/
 fi
 
 cd fastcdn-web && pnpm build
-cp -f ${curPath}/fastcdn-web/apps/web-naive/dist.zip ${curPath}/fastcdn/public/dist.zip
+cp -rf ${curPath}/fastcdn-web/apps/web-naive/dist.zip ${curPath}/fastcdn/public/dist.zip
 
 cd ${curPath}/fastcdn/public
 unzip -o dist.zip -d ./ 
+echo "web cover end"
 
 echo "rm -rf ${curPath}/fastcdn-web/apps/web-naive/dist.zip"
 rm -rf ${curPath}/fastcdn-web/apps/web-naive/dist.zip
