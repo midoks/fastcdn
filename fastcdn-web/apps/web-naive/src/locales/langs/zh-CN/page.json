@@ -23,9 +23,9 @@
         "description": "感谢您选择使用FastCDN系统，下面让我们一起开始配置系统。",
         "steps": {
             "introduction": "介绍",
-            "apiConfig": "设置API节点",
-            "database": "设置MySQL数据库",
-            "admin": "设置管理员账号",
+            "apiConfig": "API节点",
+            "database": "MySQL数据库",
+            "admin": "管理员账号",
             "complete": "完成安装"
         },
         "step1": {
@@ -37,7 +37,7 @@
         },
         "step2": {
             "api_type":"API节点类型",
-            "title": "设置API节点",
+            "title": "API节点",
             "description": "配置API服务器连接信息",
             "host": "主机地址",
             "port": "服务端口",
