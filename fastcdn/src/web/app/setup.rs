@@ -8,7 +8,7 @@ pub struct DbTestResponse {
     pub status: u16,
 }
 
-#[derive(Debug, Deserialize)] // 接收JSON请求的结构体
+#[derive(Debug, Serialize, Deserialize, Clone)] // 接收JSON请求的结构体
 pub struct DbTestRequest {
     pub host: String,
 }

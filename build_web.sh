@@ -3,7 +3,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin:/usr/loc
 curPath=`pwd`
 echo "web pnpm build start"
 
-exit 0
+# exit 0
 echo $curPath
 
 if [ -f $curPath/fastcdn-web/apps/web-naive/dist.zip ] && [ -f $curPath/fastcdn/public/dist.zip ];
