@@ -88,7 +88,7 @@ async function testDatabaseConnection() {
     
     try {
         const result = await testDatabaseConnectionApi({
-            host: formData.value.databaseHost,
+            hostname: formData.value.databaseHost,
             port: formData.value.databasePort,
             name: formData.value.databaseName,
             username: formData.value.databaseUsername,

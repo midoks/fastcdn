@@ -10,7 +10,11 @@ pub struct DbTestResponse {
 
 #[derive(Debug, Serialize, Deserialize, Clone)] // 接收JSON请求的结构体
 pub struct DbTestRequest {
-    pub host: String,
+    pub hostname: String,
+    pub port: u16,
+    pub name: String,
+    pub username: String,
+    pub password: String,
 }
 
 #[post("/db_test")]

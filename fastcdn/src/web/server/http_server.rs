@@ -31,7 +31,15 @@ impl HttpServerManager {
                             web::resource("/static/{_:.*}")
                                 .route(web::get().to(StaticHandler::handle_static)),
                         )
-                        .service(web::scope("/api").service(app::api::hello))
+                        .service(
+                            web::scope("/api")
+                                .service(app::api::hello)
+                                .service(
+                                    web::scope("/setup")
+                                        .service(app::setup::db_test_post)
+                                        .service(app::setup::db_test_get),
+                                ),
+                        )
                         .service(
                             web::scope("/setup")
                                 .service(app::setup::db_test_post)
