@@ -3,6 +3,8 @@ import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { $t } from '@vben/locales';
+import { message } from '#/adapter/naive';
+import { testDatabaseConnectionApi, installSystemApi, createApiNodeApi } from '#/api/core/setup';
 
 defineOptions({ name: 'Setup' });
 
@@ -79,14 +81,49 @@ function prevStep() {
 }
 
 // 测试数据库连接
-function testDatabaseConnection() {
-    // 这里应该调用API测试数据库连接
-    console.log('Testing database connection...', {
-        host: formData.value.databaseHost,
-        port: formData.value.databasePort,
-        name: formData.value.databaseName,
-        username: formData.value.databaseUsername,
-    });
+async function testDatabaseConnection() {
+    if (loading.value) return;
+    
+    loading.value = true;
+    
+    try {
+        const result = await testDatabaseConnectionApi({
+            host: formData.value.databaseHost,
+            port: formData.value.databasePort,
+            name: formData.value.databaseName,
+            username: formData.value.databaseUsername,
+            password: formData.value.databasePassword,
+        });
+        
+        if (result.success) {
+            message.success('数据库连接测试成功！');
+        } else {
+            message.error(`数据库连接失败：${result.message}`);
+        }
+    } catch (error: any) {
+        console.error('Database connection test failed:', error);
+        message.error(`数据库连接测试失败：${error.message || '未知错误'}`);
+    } finally {
+        loading.value = false;
+    }
+}
+
+// 创建API节点
+async function createApiNode() {
+    if (formData.value.apiType !== 'new') return;
+    
+    try {
+        await createApiNodeApi({
+            host: formData.value.apiHost,
+            port: formData.value.apiPort,
+            protocol: formData.value.apiProtocol,
+        });
+        message.success('API节点创建成功！');
+    } catch (error: any) {
+        console.error('API node creation failed:', error);
+        message.error(`API节点创建失败：${error.message || '未知错误'}`);
+        throw error;
+    }
 }
 
 // 完成安装
@@ -96,16 +133,39 @@ async function completeInstallation() {
     loading.value = true;
     
     try {
-        // 这里应该调用安装API
-        console.log('Installing with data:', formData.value);
+        // 如果是新建API节点，先创建API节点
+        if (formData.value.apiType === 'new') {
+            await createApiNode();
+        }
         
-        // 模拟安装过程
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // 调用安装API
+        const result = await installSystemApi({
+            apiHost: formData.value.apiHost,
+            apiPort: formData.value.apiPort,
+            apiProtocol: formData.value.apiProtocol,
+            apiType: formData.value.apiType,
+            nodeId: formData.value.nodeId,
+            secret: formData.value.secret,
+            databaseHost: formData.value.databaseHost,
+            databasePort: formData.value.databasePort,
+            databaseName: formData.value.databaseName,
+            databaseUsername: formData.value.databaseUsername,
+            databasePassword: formData.value.databasePassword,
+            adminUsername: formData.value.adminUsername,
+            adminPassword: formData.value.adminPassword,
+            adminEmail: formData.value.adminEmail,
+        });
         
-        // 安装完成，进入最后一步
-        currentStep.value = totalSteps;
-    } catch (error) {
+        if (result.success) {
+            message.success('系统安装成功！');
+            // 安装完成，进入最后一步
+            currentStep.value = totalSteps;
+        } else {
+            message.error(`系统安装失败：${result.message}`);
+        }
+    } catch (error: any) {
         console.error('Installation failed:', error);
+        message.error(`系统安装失败：${error.message || '未知错误'}`);
     } finally {
         loading.value = false;
     }
