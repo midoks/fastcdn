@@ -42,6 +42,14 @@ watch(() => formData.value.apiType, (newType) => {
         formData.value.secret = '';
         formData.value.apiHost = '';
         formData.value.apiPort = '';
+    } else if (newType === 'new'){
+        if (formData.value.apiPort === ''){
+            formData.value.apiPort = "10001";
+        }
+
+        if (formData.value.apiHost === ''){
+            formData.value.apiHost = "127.0.0.1";
+        }
     }
 });
 
