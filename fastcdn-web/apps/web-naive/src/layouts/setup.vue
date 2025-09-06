@@ -90,7 +90,7 @@ async function testDatabaseConnection() {
         const result = await testDatabaseConnectionApi({
             hostname: formData.value.databaseHost,
             port: formData.value.databasePort,
-            name: formData.value.databaseName,
+            dbname: formData.value.databaseName,
             username: formData.value.databaseUsername,
             password: formData.value.databasePassword,
         });

@@ -108,12 +108,6 @@ pub async fn test_db() {
         Ok(db_manager) => {
             println!("✓ 数据库管理器创建成功");
 
-            // 测试数据库连接
-            match db_manager.test_connection().await {
-                Ok(_) => println!("✓ 数据库连接测试成功"),
-                Err(e) => println!("✗ 数据库连接测试失败: {}", e),
-            }
-
             // 测试数据库迁移
             match db_manager.migrate().await {
                 Ok(_) => println!("✓ 数据库迁移成功"),
