@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize)] // 添加Debug方便日志记录
 pub struct DbTestResponse {
     pub message: String,
-    pub status: u16,
+    pub status: i16,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)] // 接收JSON请求的结构体
@@ -35,12 +35,12 @@ pub async fn db_test_post(req: web::Json<DbTestRequest>) -> impl Responder {
             }),
             Err(e) => web::Json(DbTestResponse {
                 message: format!("error: {}", e),
-                status: 1,
+                status: -1,
             }),
         },
         Err(e) => web::Json(DbTestResponse {
             message: format!("db error: {}", e),
-            status: 1,
+            status: -1,
         }),
     }
 }
