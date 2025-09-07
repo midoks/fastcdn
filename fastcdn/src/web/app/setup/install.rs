@@ -50,21 +50,33 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
     let _ = db_cfg.write();
 
     if req.api_type == "new" {
-        // 执行一个简单的命令，比如echo
+        // 安装API节点
         let output = Command::new("fastcdn-api/bin/fastcdn-api")
             .arg("setup")
-            .arg("--api-node-protocol=http")
-            .arg("--api-node-host=127.0.0.1")
-            .arg("--api-node-port=10001")
+            .arg("--protocol=http")
+            .arg("--host=127.0.0.1")
+            .arg("--port=10001")
             .output()
             .expect("Failed to execute command");
 
-        println!("output: {}", output.status.success());
         if output.status.success() {
             println!("output: {}", String::from_utf8_lossy(&output.stdout));
         } else {
             eprintln!("error: {}", String::from_utf8_lossy(&output.stderr));
         }
+
+        // 关闭正在运行的API节点，防止冲突
+        let _ = Command::new("fastcdn-api/bin/fastcdn-api")
+            .arg("stop")
+            .output()
+            .expect("Failed to execute command");
+
+        // 启动API节点
+        let _ = Command::new("fastcdn-api/bin/fastcdn-api")
+            .arg("start")
+            .arg("-d")
+            .output()
+            .expect("Failed to execute command");
 
         println!("{}", req.api_type);
     } else if req.api_type == "old" {

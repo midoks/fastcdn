@@ -78,10 +78,10 @@ pub async fn test_conf() {
         Ok(path) => {
             println!("当前运行目录: {}", path.display());
 
-            match fastcdn_common::config::server::Manager::new() {
-                Ok(config_manager) => {
-                    let server_config = config_manager.server();
-                    println!("✓ 配置文件加载成功: {:#?}", server_config);
+            match fastcdn_common::config::server::Server::instance() {
+                Ok(server_config_arc) => {
+                    let server_config = server_config_arc.lock().unwrap();
+                    println!("✓ 配置文件加载成功: {:#?}", *server_config);
 
                     // 显示配置信息
                     println!("环境: {}", server_config.env);

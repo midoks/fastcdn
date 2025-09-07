@@ -39,6 +39,22 @@ lazy_static! {
 }
 
 impl Server {
+    pub fn new() -> Result<Self, Box<dyn std::error::Error>> {
+        Ok(Server {
+            env: "development".to_string(),
+            http: Http {
+                on: true,
+                listen: vec!["0.0.0.0:8080".to_string()],
+            },
+            https: Https {
+                on: false,
+                listen: vec!["0.0.0.0:8443".to_string()],
+                cert: "".to_string(),
+                key: "".to_string(),
+            },
+        })
+    }
+
     /// 获取单例实例
     pub fn instance() -> Result<Arc<Mutex<Server>>, Box<dyn std::error::Error>> {
         let mut instance_guard = INSTANCE.lock().unwrap();
@@ -80,15 +96,23 @@ impl Server {
         }
 
         if self.http.on && self.http.listen.is_empty() {
-            return Err("HTTP服务已启用但未配置监听地址".to_string());
+            return Err(
+                "http service is enabled but no listening address has been configured".to_string(),
+            );
         }
 
         if self.https.on && self.https.listen.is_empty() {
-            return Err("HTTPS服务已启用但未配置监听地址".to_string());
+            return Err(
+                "https service has been enabled but no listening address has been configured"
+                    .to_string(),
+            );
         }
 
         if self.https.on && (self.https.cert.is_empty() || self.https.key.is_empty()) {
-            return Err("HTTPS服务已启用但未配置证书文件".to_string());
+            return Err(
+                "https service has been enabled but no certificate file has been configured"
+                    .to_string(),
+            );
         }
 
         Ok(())
@@ -120,47 +144,5 @@ impl Server {
     /// 检查是否为开发环境
     pub fn is_development(&self) -> bool {
         self.env == "dev" || self.env == "development"
-    }
-}
-
-/// 配置管理器
-#[derive(Debug)]
-pub struct Manager {
-    server: Server,
-}
-
-impl Manager {
-    /// 创建新的配置管理器
-    pub fn new() -> Result<Self, Box<dyn std::error::Error>> {
-        let server = Server::load_default()?;
-        server
-            .validate()
-            .map_err(|e| Box::new(std::io::Error::new(std::io::ErrorKind::InvalidData, e)))?;
-
-        Ok(Manager { server })
-    }
-
-    /// 创建包含API管理员配置的配置管理器
-    pub fn new_with_api_admin() -> Result<Self, Box<dyn std::error::Error>> {
-        let server = Server::load_default()?;
-        server
-            .validate()
-            .map_err(|e| Box::new(std::io::Error::new(std::io::ErrorKind::InvalidData, e)))?;
-        Ok(Manager { server })
-    }
-
-    /// 获取服务器配置
-    pub fn server(&self) -> &Server {
-        &self.server
-    }
-
-    /// 重新加载服务器配置
-    pub fn reload(&mut self) -> Result<(), Box<dyn std::error::Error>> {
-        let new_server = Server::load_default()?;
-        new_server
-            .validate()
-            .map_err(|e| Box::new(std::io::Error::new(std::io::ErrorKind::InvalidData, e)))?;
-        self.server = new_server;
-        Ok(())
     }
 }

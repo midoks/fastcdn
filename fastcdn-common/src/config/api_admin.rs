@@ -1,6 +1,8 @@
+use super::{load_default, load_from_file};
+use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
-use super::{load_from_file, load_default};
+use std::sync::{Arc, Mutex};
 
 /// 默认服务器配置文件路径
 const CONF_YAML: &str = "configs/api_admin.yaml";
@@ -17,7 +19,29 @@ pub struct ApiAdmin {
     pub secret: String,
 }
 
+// 使用 lazy_static 实现线程安全的单例
+lazy_static! {
+    static ref INSTANCE: Arc<Mutex<Option<ApiAdmin>>> = Arc::new(Mutex::new(None));
+}
+
 impl ApiAdmin {
+    /// 获取单例实例
+    pub fn instance() -> Result<Arc<Mutex<ApiAdmin>>, Box<dyn std::error::Error>> {
+        let mut instance_guard = INSTANCE.lock().unwrap();
+
+        if instance_guard.is_none() {
+            let server = Self::load_default()?;
+            server
+                .validate()
+                .map_err(|e| Box::new(std::io::Error::new(std::io::ErrorKind::InvalidData, e)))?;
+            *instance_guard = Some(server);
+        }
+
+        // 创建一个新的 Arc<Mutex<Db>> 包装实际的 Db 实例
+        let server = instance_guard.as_ref().unwrap().clone();
+        Ok(Arc::new(Mutex::new(server)))
+    }
+
     /// 从YAML文件加载API管理员配置
     pub fn load_from_file<P: AsRef<Path>>(path: P) -> Result<Self, Box<dyn std::error::Error>> {
         load_from_file(path)
@@ -31,21 +55,20 @@ impl ApiAdmin {
     /// 验证API管理员配置是否有效
     pub fn validate(&self) -> Result<(), String> {
         if self.rpc_endpoints.is_empty() {
-            return Err("RPC端点列表不能为空".to_string());
+            return Err("rpc endpoint list cannot be empty!".to_string());
         }
 
         if self.node_id.is_empty() {
-            return Err("节点ID不能为空".to_string());
+            return Err("node_id cannot be empty!".to_string());
         }
 
         if self.secret.is_empty() {
-            return Err("密钥不能为空".to_string());
+            return Err("secret cannot be empty!".to_string());
         }
 
-        // 验证RPC端点格式
         for endpoint in &self.rpc_endpoints {
             if !endpoint.starts_with("http://") && !endpoint.starts_with("https://") {
-                return Err(format!("无效的RPC端点格式: {}", endpoint));
+                return Err(format!("invalid rpc endpoint format: {}", endpoint));
             }
         }
 
@@ -74,6 +97,18 @@ impl ApiAdmin {
         } else {
             vec![]
         }
+    }
+
+    /// 将当前配置写入/覆盖到本地YAML文件
+    pub fn write(&self) -> Result<(), Box<dyn std::error::Error>> {
+        self.write_to_file(CONF_YAML)
+    }
+
+    /// 将当前配置写入/覆盖到指定路径的YAML文件
+    pub fn write_to_file<P: AsRef<Path>>(&self, path: P) -> Result<(), Box<dyn std::error::Error>> {
+        let yaml_content = serde_yaml::to_string(self)?;
+        std::fs::write(path, yaml_content)?;
+        Ok(())
     }
 }
 
