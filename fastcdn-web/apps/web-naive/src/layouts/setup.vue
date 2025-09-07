@@ -130,11 +130,11 @@ async function testDatabaseConnection() {
             password: formData.value.databasePassword,
         });
         
-        if (result.success) {
+        if (result.data.status===0) {
             message.success('数据库连接测试成功！');
             return true;
         } else {
-            message.error(`数据库连接失败：${result.message}`);
+            message.error(`${result.data.message}`);
         }
     } catch (error: any) {
         console.error('Database connection test failed:', error);
@@ -167,15 +167,20 @@ async function createApiNode() {
 // 完成安装
 async function completeInstallation() {
     if (loading.value) return;
+
+    if (formData.value.adminUsername === ""){
+        message.error("管理员用户名不能为空!");
+        return;
+    }
+
+    if (formData.value.adminPassword === ""){
+        message.error("管理员密码不能为空!");
+        return;
+    }
     
     loading.value = true;
     
-    try {
-        // 如果是新建API节点，先创建API节点
-        if (formData.value.apiType === 'new') {
-            await createApiNode();
-        }
-        
+    try {    
         // 调用安装API
         const result = await installSystemApi({
             apiHost: formData.value.apiHost,
