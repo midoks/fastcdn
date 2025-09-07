@@ -1,5 +1,6 @@
 use actix_web::{Responder, get, post, web};
 use serde::{Deserialize, Serialize};
+use std::process::Command;
 
 // 必须为所有需要序列化/反序列化的结构体添加derive
 #[derive(Debug, Serialize, Deserialize)] // 添加Debug方便日志记录
@@ -39,6 +40,36 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
         username: req.username.clone(),
         password: req.password.clone(),
     };
+
+    let db_cfg = fastcdn_common::config::db::Db {
+        user: req.username.clone(),
+        password: req.password.clone(),
+        database: req.dbname.clone(),
+        host: req.hostname.clone() + ":" + &req.port.to_string(),
+    };
+    let _ = db_cfg.write();
+
+    if req.api_type == "new" {
+        // 执行一个简单的命令，比如echo
+        let output = Command::new("fastcdn-api/bin/fastcdn-api")
+            .arg("setup")
+            .arg("--api-node-protocol=http")
+            .arg("--api-node-host=127.0.0.1")
+            .arg("--api-node-port=10001")
+            .output()
+            .expect("Failed to execute command");
+
+        println!("output: {}", output.status.success());
+        if output.status.success() {
+            println!("output: {}", String::from_utf8_lossy(&output.stdout));
+        } else {
+            eprintln!("error: {}", String::from_utf8_lossy(&output.stderr));
+        }
+
+        println!("{}", req.api_type);
+    } else if req.api_type == "old" {
+        println!("{}", req.api_type);
+    }
 
     match fastcdn_common::db::pool::Manager::new().await {
         Ok(db) => match db.test_connection(&config).await {

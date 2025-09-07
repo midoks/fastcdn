@@ -1,8 +1,8 @@
-use serde::{Deserialize, Serialize};
-use std::sync::{Arc, Mutex};
-use std::path::Path;
+use super::{load_default, load_from_file};
 use lazy_static::lazy_static;
-use super::{load_from_file, load_default};
+use serde::{Deserialize, Serialize};
+use std::path::Path;
+use std::sync::{Arc, Mutex};
 
 /// 默认服务器配置文件路径
 const CONF_YAML: &str = "configs/db.yaml";
@@ -25,14 +25,14 @@ impl Db {
     /// 获取单例实例
     pub fn instance() -> Result<Arc<Mutex<Db>>, Box<dyn std::error::Error>> {
         let mut instance_guard = INSTANCE.lock().unwrap();
-        
+
         if instance_guard.is_none() {
             let db = Self::load_default()?;
             db.validate()
                 .map_err(|e| Box::new(std::io::Error::new(std::io::ErrorKind::InvalidData, e)))?;
             *instance_guard = Some(db);
         }
-        
+
         // 创建一个新的 Arc<Mutex<Db>> 包装实际的 Db 实例
         let db = instance_guard.as_ref().unwrap().clone();
         Ok(Arc::new(Mutex::new(db)))
@@ -41,9 +41,10 @@ impl Db {
     /// 重新加载配置（更新单例实例）
     pub fn reload() -> Result<(), Box<dyn std::error::Error>> {
         let new_db = Self::load_default()?;
-        new_db.validate()
+        new_db
+            .validate()
             .map_err(|e| Box::new(std::io::Error::new(std::io::ErrorKind::InvalidData, e)))?;
-        
+
         let mut instance_guard = INSTANCE.lock().unwrap();
         *instance_guard = Some(new_db);
         Ok(())
@@ -77,6 +78,18 @@ impl Db {
             return Err("host cannot be empty".to_string());
         }
 
+        Ok(())
+    }
+
+    /// 将当前配置写入/覆盖到本地YAML文件
+    pub fn write(&self) -> Result<(), Box<dyn std::error::Error>> {
+        self.write_to_file(CONF_YAML)
+    }
+
+    /// 将当前配置写入/覆盖到指定路径的YAML文件
+    pub fn write_to_file<P: AsRef<Path>>(&self, path: P) -> Result<(), Box<dyn std::error::Error>> {
+        let yaml_content = serde_yaml::to_string(self)?;
+        std::fs::write(path, yaml_content)?;
         Ok(())
     }
 }
