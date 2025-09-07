@@ -183,20 +183,22 @@ async function completeInstallation() {
     try {    
         // 调用安装API
         const result = await installSystemApi({
-            apiHost: formData.value.apiHost,
-            apiPort: formData.value.apiPort,
-            apiProtocol: formData.value.apiProtocol,
-            apiType: formData.value.apiType,
-            nodeId: formData.value.nodeId,
+            api_host: formData.value.apiHost,
+            api_port: formData.value.apiPort,
+            api_protocol: formData.value.apiProtocol,
+            api_type: formData.value.apiType,
+
+            node_id: formData.value.nodeId,
             secret: formData.value.secret,
-            databaseHost: formData.value.databaseHost,
-            databasePort: formData.value.databasePort,
-            databaseName: formData.value.databaseName,
-            databaseUsername: formData.value.databaseUsername,
-            databasePassword: formData.value.databasePassword,
-            adminUsername: formData.value.adminUsername,
-            adminPassword: formData.value.adminPassword,
-            adminEmail: formData.value.adminEmail,
+
+            hostname: formData.value.databaseHost,
+            port: formData.value.databasePort,
+            dbname: formData.value.databaseName,
+            username: formData.value.databaseUsername,
+            password: formData.value.databasePassword,
+
+            admin_username: formData.value.adminUsername,
+            admin_password: formData.value.adminPassword,
         });
         
         if (result.success) {
@@ -204,7 +206,7 @@ async function completeInstallation() {
             // 安装完成，进入最后一步
             currentStep.value = totalSteps;
         } else {
-            message.error(`系统安装失败：${result.message}`);
+            message.error(`系统安装失败：${result.data.message}`);
         }
     } catch (error: any) {
         console.error('Installation failed:', error);
@@ -213,8 +215,6 @@ async function completeInstallation() {
         loading.value = false;
     }
 }
-
-
 
 // 跳转到登录页面
 function goToLogin() {
