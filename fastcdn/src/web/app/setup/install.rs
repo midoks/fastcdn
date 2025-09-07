@@ -51,7 +51,8 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
 
     if req.api_type == "new" {
         // 安装API节点
-        let output = Command::new("fastcdn-api/bin/fastcdn-api")
+        let output = Command::new("bin/fastcdn-api")
+            .current_dir("fastcdn-api")
             .arg("setup")
             .arg("--protocol=http")
             .arg("--host=127.0.0.1")
@@ -66,13 +67,15 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
         }
 
         // 关闭正在运行的API节点，防止冲突
-        let _ = Command::new("fastcdn-api/bin/fastcdn-api")
+        let _ = Command::new("bin/fastcdn-api")
+            .current_dir("fastcdn-api")
             .arg("stop")
             .output()
             .expect("Failed to execute command");
 
         // 启动API节点
-        let _ = Command::new("fastcdn-api/bin/fastcdn-api")
+        let _ = Command::new("bin/fastcdn-api")
+            .current_dir("fastcdn-api")
             .arg("start")
             .arg("-d")
             .output()
