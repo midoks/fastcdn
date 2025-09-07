@@ -67,9 +67,20 @@ const steps = computed(() => [
 
 
 // 下一步
-function nextStep() {
+async function nextStep() {
     if (currentStep.value < totalSteps) {
-        currentStep.value++;
+        let plus = true;
+
+        if (currentStep.value === 3){
+            let db_t = await testDatabaseConnection();
+            if (!db_t){
+                plus = false;
+            }
+        }
+
+        if (plus){
+            currentStep.value++;
+        }
     }
 }
 
@@ -82,21 +93,46 @@ function prevStep() {
 
 // 测试数据库连接
 async function testDatabaseConnection() {
-    if (loading.value) return;
+    if (loading.value) return false;
+
+    if (formData.value.databaseHost === ""){
+        message.error("数据库主机不能为空!");
+        return false;
+    }
+    if (formData.value.databasePort === ""){
+        message.error("数据库端口不能为空!");
+        return false;
+    }
+
+    if (formData.value.databaseName === ""){
+        message.error("数据库名称不能为空!");
+        return false;
+    }
     
+    if (formData.value.databaseUsername === ""){
+        message.error("数据库用户名不能为空!");
+        return false;
+    }
+
+    if (formData.value.databasePassword === ""){
+        message.error("数据库密码不能为空!");
+        return false;
+    }
+
     loading.value = true;
     
     try {
         const result = await testDatabaseConnectionApi({
-            hostname: formData.value.databaseHost,
+            host: formData.value.databaseHost,
             port: formData.value.databasePort,
-            dbname: formData.value.databaseName,
+            name: formData.value.databaseName,
             username: formData.value.databaseUsername,
             password: formData.value.databasePassword,
         });
         
         if (result.success) {
             message.success('数据库连接测试成功！');
+            return true;
         } else {
             message.error(`数据库连接失败：${result.message}`);
         }
@@ -106,6 +142,8 @@ async function testDatabaseConnection() {
     } finally {
         loading.value = false;
     }
+
+    return false;
 }
 
 // 创建API节点
