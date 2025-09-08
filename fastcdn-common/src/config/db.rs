@@ -57,7 +57,14 @@ impl Db {
 
     /// 从默认路径加载配置
     pub fn load_default() -> Result<Self, Box<dyn std::error::Error>> {
-        load_default(CONF_YAML)
+        let exec_path = std::env::current_exe()?;
+        let root_path = exec_path.parent().and_then(|p| p.parent());
+
+        let db_file = match root_path {
+            Some(path) => path.join(CONF_YAML).to_string_lossy().to_string(),
+            None => CONF_YAML.to_string(),
+        };
+        load_default(&db_file)
     }
 
     /// 验证配置是否有效
