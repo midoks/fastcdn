@@ -31,7 +31,7 @@ pub struct InstallRequest {
 
 #[post("/install")]
 pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
-    println!("{:?}", req);
+    // println!("{:?}", req);
 
     let config = fastcdn_common::db::pool::DbConfig {
         hostname: req.hostname.clone(),
@@ -112,7 +112,7 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
         println!("{}", req.api_type);
     }
 
-    let api_admin_cfg = fastcdn_common::config::api_admin::ApiAdmin {
+    let api_admin_yaml = fastcdn_common::config::api_admin::ApiAdmin {
         rpc_endpoints: vec![format!("http://{}:{}", req.api_host, req.api_port)],
         rpc_disable_update: false,
         node_id: result_map
@@ -127,7 +127,7 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
             .to_string(),
     };
 
-    let _ = api_admin_cfg.write();
+    let _ = api_admin_yaml.write();
 
     web::Json(InstallResponse {
         message: "ok".to_string(),
