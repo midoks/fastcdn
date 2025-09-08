@@ -113,6 +113,15 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
         println!("{}", req.api_type);
     }
 
+    let api_admin_cfg = fastcdn_common::config::api_admin::ApiAdmin {
+        rpc_endpoints: vec![format!("http://{}:{}", req.api_host, req.api_port)],
+        rpc_disable_update: false,
+        node_id: result_map.get("node_id").and_then(|v| v.as_str()).unwrap_or("").to_string(),
+        secret: result_map.get("secret").and_then(|v| v.as_str()).unwrap_or("").to_string(),
+    };
+
+    let _ = api_admin_cfg.write();
+
     web::Json(InstallResponse {
         message: "ok".to_string(),
         status: 0,
