@@ -62,7 +62,7 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
         user: req.username.clone(),
         password: req.password.clone(),
         database: req.dbname.clone(),
-        host: req.hostname.clone() + ":" + &req.port.to_string(),
+        host: format!("{}:{}", req.hostname, req.port),
     };
     let _ = db_cfg.write();
     let _ = db_cfg.write_api();
@@ -75,8 +75,8 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
             .current_dir("fastcdn-api")
             .arg("setup")
             .arg("--protocol=http")
-            .arg("--host=127.0.0.1")
-            .arg("--port=10001")
+            .arg(format!("--host={}", req.api_host))
+            .arg(format!("--port={}", req.api_port))
             .output()
             .expect("Failed to execute command");
 
@@ -88,10 +88,9 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
         }
 
         result_map = serde_json::from_slice(&output.stdout).unwrap_or_default();
-
-        println!("output: {}", String::from_utf8_lossy(&output.stdout));
-        println!("result_map:{}", result_map);
-        println!("result_map:{:?}", result_map.get("node_id"));
+        // println!("output: {}", String::from_utf8_lossy(&output.stdout));
+        // println!("result_map:{}", result_map);
+        // println!("result_map:{:?}", result_map.get("node_id"));
 
         // 关闭正在运行的API节点，防止冲突
         let _ = Command::new("bin/fastcdn-api")
@@ -116,8 +115,16 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
     let api_admin_cfg = fastcdn_common::config::api_admin::ApiAdmin {
         rpc_endpoints: vec![format!("http://{}:{}", req.api_host, req.api_port)],
         rpc_disable_update: false,
-        node_id: result_map.get("node_id").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-        secret: result_map.get("secret").and_then(|v| v.as_str()).unwrap_or("").to_string(),
+        node_id: result_map
+            .get("node_id")
+            .and_then(|v| v.as_str())
+            .unwrap_or("")
+            .to_string(),
+        secret: result_map
+            .get("secret")
+            .and_then(|v| v.as_str())
+            .unwrap_or("")
+            .to_string(),
     };
 
     let _ = api_admin_cfg.write();
