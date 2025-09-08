@@ -111,8 +111,12 @@ impl Setup {
             return Err("host cannot be empty.".into());
         }
 
+        println!("install_db:{:?}", protocol);
+
         // 初始化安装创建数据库
         self.install_db().await?;
+
+        println!("install_db:{:?} end", protocol);
         self.check_data().await?;
 
         let api_token_data =
