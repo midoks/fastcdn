@@ -58,14 +58,14 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
         }),
     };
 
-    let db_cfg = fastcdn_common::config::db::Db {
+    let db_yaml = fastcdn_common::config::db::Db {
         user: req.username.clone(),
         password: req.password.clone(),
         database: req.dbname.clone(),
         host: format!("{}:{}", req.hostname, req.port),
     };
-    let _ = db_cfg.write();
-    let _ = db_cfg.write_api();
+    let _ = db_yaml.write();
+    let _ = db_yaml.write_api();
 
     let mut result_map: serde_json::Value = serde_json::json!({});
 
