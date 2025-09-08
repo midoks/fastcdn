@@ -48,6 +48,7 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
         host: req.hostname.clone() + ":" + &req.port.to_string(),
     };
     let _ = db_cfg.write();
+    let _ = db_cfg.write_api();
 
     if req.api_type == "new" {
         // 安装API节点
