@@ -41,6 +41,23 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
         password: req.password.clone(),
     };
 
+    match fastcdn_common::db::pool::Manager::new().await {
+        Ok(db) => match db.test_connection(&config).await {
+            Ok(_) => web::Json(InstallResponse {
+                message: "ok".to_string(),
+                status: 0,
+            }),
+            Err(e) => web::Json(InstallResponse {
+                message: format!("error: {}", e),
+                status: -1,
+            }),
+        },
+        Err(e) => web::Json(InstallResponse {
+            message: format!("db error: {}", e),
+            status: -1,
+        }),
+    };
+
     let db_cfg = fastcdn_common::config::db::Db {
         user: req.username.clone(),
         password: req.password.clone(),
@@ -49,6 +66,8 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
     };
     let _ = db_cfg.write();
     let _ = db_cfg.write_api();
+
+    let mut result_map: serde_json::Value = serde_json::json!({});
 
     if req.api_type == "new" {
         // 安装API节点
@@ -61,11 +80,18 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
             .output()
             .expect("Failed to execute command");
 
-        if output.status.success() {
-            println!("output: {}", String::from_utf8_lossy(&output.stdout));
-        } else {
-            eprintln!("error: {}", String::from_utf8_lossy(&output.stderr));
+        if !output.status.success() {
+            return web::Json(InstallResponse {
+                message: format!("install error: {}", String::from_utf8_lossy(&output.stderr)),
+                status: -1,
+            });
         }
+
+        result_map = serde_json::from_slice(&output.stdout).unwrap_or_default();
+
+        println!("output: {}", String::from_utf8_lossy(&output.stdout));
+        println!("result_map:{}", result_map);
+        println!("result_map:{:?}", result_map.get("node_id"));
 
         // 关闭正在运行的API节点，防止冲突
         let _ = Command::new("bin/fastcdn-api")
@@ -87,22 +113,10 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
         println!("{}", req.api_type);
     }
 
-    match fastcdn_common::db::pool::Manager::new().await {
-        Ok(db) => match db.test_connection(&config).await {
-            Ok(_) => web::Json(InstallResponse {
-                message: "ok".to_string(),
-                status: 0,
-            }),
-            Err(e) => web::Json(InstallResponse {
-                message: format!("error: {}", e),
-                status: -1,
-            }),
-        },
-        Err(e) => web::Json(InstallResponse {
-            message: format!("db error: {}", e),
-            status: -1,
-        }),
-    }
+    web::Json(InstallResponse {
+        message: "ok".to_string(),
+        status: 0,
+    })
 }
 
 #[get("/install")]

@@ -972,6 +972,7 @@ dependencies = [
  "prost",
  "rust-embed 8.7.2",
  "serde",
+ "serde_json",
  "serde_yaml",
  "sqlx",
  "tokio",
