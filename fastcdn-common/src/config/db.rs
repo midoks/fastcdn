@@ -86,41 +86,15 @@ impl Db {
         self.write_to_file(CONF_YAML)
     }
 
+    /// 将当前配置写入/覆盖到本地YAML文件[api]配置写入
+    pub fn write_api(&self) -> Result<(), Box<dyn std::error::Error>> {
+        self.write_to_file(format!("fastcdn-api/{}", CONF_YAML))
+    }
+
     /// 将当前配置写入/覆盖到指定路径的YAML文件
     pub fn write_to_file<P: AsRef<Path>>(&self, path: P) -> Result<(), Box<dyn std::error::Error>> {
         let yaml_content = serde_yaml::to_string(self)?;
         std::fs::write(path, yaml_content)?;
         Ok(())
-    }
-}
-
-/// 配置管理器
-pub struct Manager {
-    // 不再直接持有db实例，而是通过单例获取
-}
-
-impl Manager {
-    /// 创建新的配置管理器
-    pub fn new() -> Result<Self, Box<dyn std::error::Error>> {
-        // 确保单例已初始化
-        Db::instance()?;
-        Ok(Manager {})
-    }
-
-    /// 创建包含API管理员配置的配置管理器
-    pub fn new_db() -> Result<Self, Box<dyn std::error::Error>> {
-        // 确保单例已初始化
-        Db::instance()?;
-        Ok(Manager {})
-    }
-
-    /// 获取服务器配置
-    pub fn db(&self) -> Result<Arc<Mutex<Db>>, Box<dyn std::error::Error>> {
-        Db::instance()
-    }
-
-    /// 重新加载服务器配置
-    pub fn reload(&mut self) -> Result<(), Box<dyn std::error::Error>> {
-        Db::reload()
     }
 }
