@@ -1,7 +1,4 @@
 use crate::rpc::auth::AuthMiddleware;
-use crate::rpc::fastcdn::{
-    AdminCreateRequest, AdminCreateResponse, AdminLoginRequest, AdminLoginResponse,
-};
 use tonic::codegen::*;
 use tonic::transport::Channel;
 use tonic::{Request, metadata::MetadataValue};
@@ -24,7 +21,7 @@ impl CommonRpc {
     }
 
     /// 统一的 metadata 处理方法
-    fn prepare_request_with_metadata<T>(
+    pub fn prepare_request_with_metadata<T>(
         &self,
         req: T,
         request_type: RequestAuth,
@@ -77,7 +74,7 @@ impl CommonRpc {
     }
 
     /// 统一的 gRPC 调用方法
-    async fn make_grpc_call<T, R>(
+    pub async fn make_grpc_call<T, R>(
         &mut self,
         request: Request<T>,
         url: &str,
@@ -94,20 +91,5 @@ impl CommonRpc {
 
         let response = client.unary(request, path, codec).await?;
         Ok(response.into_inner())
-    }
-
-    pub async fn login(
-        &mut self,
-        req: AdminLoginRequest,
-    ) -> Result<AdminLoginResponse, Box<dyn std::error::Error>> {
-        let request = self.prepare_request_with_metadata(req, RequestAuth::ADMIN)?;
-        self.make_grpc_call(request, "/fastcdn.Admin/login").await
-    }
-    pub async fn create(
-        &mut self,
-        req: AdminCreateRequest,
-    ) -> Result<AdminCreateResponse, Box<dyn std::error::Error>> {
-        let request = self.prepare_request_with_metadata(req, RequestAuth::ADMIN)?;
-        self.make_grpc_call(request, "/fastcdn.Admin/create").await
     }
 }
