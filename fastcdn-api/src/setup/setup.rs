@@ -121,6 +121,8 @@ impl Setup {
             return Err("can not find admin node token, please run the setup again".into());
         }
 
+        // println!("api_token_data:{:?}", api_token_data);
+
         let mut api_node_id = fastcdn_common::orm::api_node::find_enabled_id_with_addr(
             protocol,
             host,
@@ -128,7 +130,6 @@ impl Setup {
         )
         .await?;
 
-        // println!("api_node_id:{:?}", api_node_id);
         if api_node_id == 0 {
             let addr = NetworkAddressConfig {
                 protocal: protocol.to_string(),
@@ -178,15 +179,27 @@ impl Setup {
         api_yaml.write()?;
 
         // 然后创建用于打印的数据
-        let mut data = std::collections::HashMap::new();
+        let mut data = std::collections::HashMap::<String, serde_json::Value>::new();
         data.insert(
             "node_id".to_string(),
-            serde_json::Value::String(api_yaml.node_id),
+            serde_json::Value::String(
+                api_token_data[0]
+                    .get("node_id")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or_default()
+                    .to_string(),
+            ),
         );
 
         data.insert(
             "secret".to_string(),
-            serde_json::Value::String(api_yaml.secret),
+            serde_json::Value::String(
+                api_token_data[0]
+                    .get("secret")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or_default()
+                    .to_string(),
+            ),
         );
         data.insert("is_ok".to_string(), serde_json::Value::Bool(true));
 
