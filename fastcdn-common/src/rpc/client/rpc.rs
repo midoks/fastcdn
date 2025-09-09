@@ -104,7 +104,7 @@ impl CommonRpc {
         }
 
         println!(
-            "准备请求 - 类型: {:?}, metadata: {:?}",
+            "request: {:?}, metadata: {:?}",
             request_type,
             request.metadata()
         );

@@ -46,7 +46,7 @@ impl AuthMiddleware {
     pub fn verify_admin_request<T>(request: &Request<T>) -> Result<(), Status> {
         let metadata = request.metadata();
 
-        // println!("metadata:{:?}", metadata);
+        println!("metadata:{:?}", metadata);
 
         let node_id = metadata
             .get("node-id")
@@ -63,9 +63,9 @@ impl AuthMiddleware {
             .map_err(|e| Status::invalid_argument(format!("decode token failed: {}", e)))?;
 
         // 获取配置用于解密
-        let api_node = ApiNode::instance()
+        let api_admin = crate::config::api_admin::ApiAdmin::instance()
             .map_err(|e| Status::internal(format!("verify_admin_request loading failed: {}", e)))?;
-        let config = api_node.lock().unwrap();
+        let config = api_admin.lock().unwrap();
 
         // 使用AES解密
         let cipher = crate::utils::aes::AesCfbCipher::new(256)
@@ -82,6 +82,7 @@ impl AuthMiddleware {
             .map_err(|e| Status::invalid_argument(format!("header json utf8: {}", e)))?;
         let header: MetaDataHeader = serde_json::from_str(&header_jstr)
             .map_err(|e| Status::invalid_argument(format!("header json parse failed: {}", e)))?;
+
         println!("header:{:?}", header);
 
         // 验证 token 类型

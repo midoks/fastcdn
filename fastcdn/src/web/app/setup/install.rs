@@ -96,7 +96,6 @@ pub async fn install_post(
         // println!("output: {}", String::from_utf8_lossy(&output.stdout));
         result_map = serde_json::from_slice(&output.stdout).unwrap_or_default();
         // println!("result_map:{:?}", result_map);
-        // println!("result_map node_id:{:?}", result_map.get("node_id"));
 
         // 关闭正在运行的API节点，防止冲突
         let _ = Command::new("bin/fastcdn-api")

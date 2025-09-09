@@ -161,7 +161,7 @@ impl Setup {
         }
 
         let node_data = fastcdn_common::orm::api_node::find_enabled_with_id(api_node_id).await?;
-        let api_config = fastcdn_common::config::api::Api {
+        let api_yaml = fastcdn_common::config::api::Api {
             node_id: node_data[0]
                 .get("unique_id")
                 .and_then(|v| v.as_str())
@@ -175,18 +175,18 @@ impl Setup {
         };
 
         // 先写入配置文件
-        api_config.write()?;
+        api_yaml.write()?;
 
         // 然后创建用于打印的数据
         let mut data = std::collections::HashMap::new();
         data.insert(
             "node_id".to_string(),
-            serde_json::Value::String(api_config.node_id),
+            serde_json::Value::String(api_yaml.node_id),
         );
 
         data.insert(
             "secret".to_string(),
-            serde_json::Value::String(api_config.secret),
+            serde_json::Value::String(api_yaml.secret),
         );
         data.insert("is_ok".to_string(), serde_json::Value::Bool(true));
 

@@ -20,7 +20,7 @@ impl Admin for FcAdmin {
         request: Request<CreateOrUpdateAdminRequest>,
     ) -> Result<Response<CreateOrUpdateAdminResponse>, Status> {
         // 验证请求头认证
-        // AuthMiddleware::verify_request(&request)?;
+        AuthMiddleware::verify_admin_request(&request)?;
 
         println!("收到请求: {:?}", request);
 

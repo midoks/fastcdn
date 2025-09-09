@@ -110,7 +110,14 @@ impl ApiAdmin {
 
     /// 将当前配置写入/覆盖到本地YAML文件
     pub fn write(&self) -> Result<(), Box<dyn std::error::Error>> {
-        self.write_to_file(CONF_YAML)
+        let exec_path = std::env::current_exe()?;
+        let root_path = exec_path.parent().and_then(|p| p.parent());
+
+        let api_admin_file = match root_path {
+            Some(path) => path.join(CONF_YAML).to_string_lossy().to_string(),
+            None => CONF_YAML.to_string(),
+        };
+        self.write_to_file(&api_admin_file)
     }
 
     /// 将当前配置写入/覆盖到指定路径的YAML文件
@@ -119,57 +126,9 @@ impl ApiAdmin {
         std::fs::write(path, yaml_content)?;
         Ok(())
     }
-}
 
-/// 配置管理器
-pub struct Manager {
-    api_admin: ApiAdmin,
-}
-
-impl Manager {
-    /// 创建新的配置管理器
-    pub fn new() -> Result<Self, Box<dyn std::error::Error>> {
-        let api_admin = ApiAdmin::load_default()?;
-        api_admin
-            .validate()
-            .map_err(|e| Box::new(std::io::Error::new(std::io::ErrorKind::InvalidData, e)))?;
-
-        Ok(Manager { api_admin })
-    }
-
-    /// 创建包含API管理员配置的配置管理器
-    pub fn new_with_api_admin() -> Result<Self, Box<dyn std::error::Error>> {
-        let api_admin = ApiAdmin::load_default()?;
-        api_admin
-            .validate()
-            .map_err(|e| Box::new(std::io::Error::new(std::io::ErrorKind::InvalidData, e)))?;
-
-        Ok(Manager { api_admin })
-    }
-
-    /// 加载API管理员配置
-    pub fn load_api_admin(&mut self) -> Result<(), Box<dyn std::error::Error>> {
-        let api_admin = ApiAdmin::load_default()?;
-        api_admin
-            .validate()
-            .map_err(|e| Box::new(std::io::Error::new(std::io::ErrorKind::InvalidData, e)))?;
-        self.api_admin = api_admin;
-        Ok(())
-    }
-
-    /// 获取API管理员配置
-    pub fn api_admin(&self) -> &ApiAdmin {
-        &self.api_admin
-    }
-
-    /// 重新加载API管理员配置
-    pub fn reload(&mut self) -> Result<(), Box<dyn std::error::Error>> {
-        let new_api_admin = ApiAdmin::load_default()?;
-        new_api_admin
-            .validate()
-            .map_err(|e| Box::new(std::io::Error::new(std::io::ErrorKind::InvalidData, e)))?;
-        self.api_admin = new_api_admin;
-
-        Ok(())
+    /// 验证请求的nodeId和secret是否匹配
+    pub fn verify_credentials(&self, node_id: &str, secret: &str) -> bool {
+        self.node_id == node_id && self.secret == secret
     }
 }
