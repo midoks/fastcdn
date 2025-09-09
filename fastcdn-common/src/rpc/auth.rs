@@ -146,10 +146,10 @@ impl AuthMiddleware {
 
     /// 添加管理员请求头信息
     pub fn add_header_admin<T>(mut request: Request<T>) -> Result<Request<T>, Status> {
-        let api_node = crate::config::api_admin::ApiAdmin::instance()
+        let api_admin = crate::config::api_admin::ApiAdmin::instance()
             .map_err(|e| Status::internal(format!("add_header_admin loading failed: {}", e)))?;
 
-        let config = api_node.lock().unwrap();
+        let config = api_admin.lock().unwrap();
         let timestamp = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
             .unwrap()
@@ -165,7 +165,7 @@ impl AuthMiddleware {
         let serialized = serde_json::to_string(&args)
             .map_err(|e| Status::internal(format!("serialization error: {}", e)))?;
         let cipher = crate::utils::aes::AesCfbCipher::new(256)
-            .map_err(|e| Status::internal(format!("AES cipher creation failed: {}", e)))?;
+            .map_err(|e| Status::internal(format!("aes cipher creation failed: {}", e)))?;
         let data = cipher
             .encrypt(
                 config.secret.as_bytes(),

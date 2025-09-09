@@ -142,7 +142,7 @@ pub async fn install_post(
     };
 
     let resp = Arc::get_mut(&mut admin_rpc)
-        .ok_or("Failed to get mutable reference to admin_rpc")?
+        .ok_or("failed to get mutable reference to admin_rpc")?
         .create_or_update_admin(req_admin.clone())
         .await?;
 

@@ -24,7 +24,7 @@ impl rpc::CommonRpc {
         &mut self,
         req: CreateOrUpdateAdminRequest,
     ) -> Result<CreateOrUpdateAdminResponse, Box<dyn std::error::Error>> {
-        println!("create_or_update_admin:{:?}", req);
+        // println!("create_or_update_admin:{:?}", req);
         let request = self.prepare_request_with_metadata(req, RequestAuth::ADMIN)?;
         self.make_grpc_call(request, "/fastcdn.Admin/createOrUpdateAdmin")
             .await
