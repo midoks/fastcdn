@@ -64,6 +64,8 @@ impl Db {
             Some(path) => path.join(CONF_YAML).to_string_lossy().to_string(),
             None => CONF_YAML.to_string(),
         };
+
+        // println!("db_file:{:?}", db_file);
         load_default(&db_file)
     }
 

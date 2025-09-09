@@ -2,6 +2,7 @@ use actix_web::{Responder, get, post, web};
 use serde::{Deserialize, Serialize};
 use std::process::Command;
 use std::sync::Arc;
+use tokio::time;
 
 // 必须为所有需要序列化/反序列化的结构体添加derive
 #[derive(Debug, Serialize, Deserialize)] // 添加Debug方便日志记录
@@ -81,18 +82,21 @@ pub async fn install_post(
             .output()
             .expect("Failed to execute command");
 
-        // println!("output: {}", String::from_utf8_lossy(&output.stdout));
-        // println!("error: {}", String::from_utf8_lossy(&output.stderr));
         if !output.status.success() {
+            println!("output error: {}", String::from_utf8_lossy(&output.stderr));
             return Ok(web::Json(InstallResponse {
-                message: format!("install error: {}", String::from_utf8_lossy(&output.stderr)),
+                message: format!(
+                    "install api error: {:?}",
+                    String::from_utf8_lossy(&output.stderr)
+                ),
                 status: -1,
             }));
         }
 
+        // println!("output: {}", String::from_utf8_lossy(&output.stdout));
         result_map = serde_json::from_slice(&output.stdout).unwrap_or_default();
-        // println!("result_map:{}", result_map);
-        // println!("result_map:{:?}", result_map.get("node_id"));
+        // println!("result_map:{:?}", result_map);
+        // println!("result_map node_id:{:?}", result_map.get("node_id"));
 
         // 关闭正在运行的API节点，防止冲突
         let _ = Command::new("bin/fastcdn-api")
@@ -128,6 +132,8 @@ pub async fn install_post(
     };
     let _ = api_admin_yaml.write();
 
+    tokio::time::sleep(tokio::time::Duration::from_secs(2)).await;
+
     let mut admin_rpc = fastcdn_common::rpc::client::CommonRpc::admin_rpc().await?;
 
     let req_admin = fastcdn_common::rpc::fastcdn::CreateOrUpdateAdminRequest {
@@ -137,10 +143,10 @@ pub async fn install_post(
 
     let resp = Arc::get_mut(&mut admin_rpc)
         .ok_or("Failed to get mutable reference to admin_rpc")?
-        .create_or_update_admin(req_admin)
+        .create_or_update_admin(req_admin.clone())
         .await?;
 
-    println!("{:?}", resp);
+    println!("resp:{:?}", resp);
 
     Ok(web::Json(InstallResponse {
         message: "ok".to_string(),

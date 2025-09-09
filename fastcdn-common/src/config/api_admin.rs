@@ -30,16 +30,18 @@ impl ApiAdmin {
         let mut instance_guard = INSTANCE.lock().unwrap();
 
         if instance_guard.is_none() {
-            let server = Self::load_default()?;
-            server
+            let api_admin = Self::load_default()?;
+
+            println!("{:?}", api_admin);
+            api_admin
                 .validate()
                 .map_err(|e| Box::new(std::io::Error::new(std::io::ErrorKind::InvalidData, e)))?;
-            *instance_guard = Some(server);
+            *instance_guard = Some(api_admin);
         }
 
-        // 创建一个新的 Arc<Mutex<Db>> 包装实际的 Db 实例
-        let server = instance_guard.as_ref().unwrap().clone();
-        Ok(Arc::new(Mutex::new(server)))
+        // 创建一个新的 Arc<Mutex<ApiAdmin>> 包装实际的 ApiAdmin 实例
+        let api_admin = instance_guard.as_ref().unwrap().clone();
+        Ok(Arc::new(Mutex::new(api_admin)))
     }
 
     /// 从YAML文件加载API管理员配置
@@ -49,7 +51,14 @@ impl ApiAdmin {
 
     /// 从默认路径加载API管理员配置
     pub fn load_default() -> Result<Self, Box<dyn std::error::Error>> {
-        load_default(CONF_YAML)
+        let exec_path = std::env::current_exe()?;
+        let root_path = exec_path.parent().and_then(|p| p.parent());
+
+        let api_admin_file = match root_path {
+            Some(path) => path.join(CONF_YAML).to_string_lossy().to_string(),
+            None => CONF_YAML.to_string(),
+        };
+        load_default(&api_admin_file)
     }
 
     /// 验证API管理员配置是否有效

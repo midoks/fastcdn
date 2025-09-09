@@ -1,10 +1,10 @@
 use crate::config::api_admin::ApiAdmin;
 use crate::rpc::auth::AuthMiddleware;
+use lazy_static::lazy_static;
+use std::sync::{Arc, Mutex};
 use tonic::transport::Channel;
 use tonic::{Request, metadata::MetadataValue};
 use tonic::{Status, codegen::*};
-use lazy_static::lazy_static;
-use std::sync::{Arc, Mutex};
 
 lazy_static! {
     static ref INSTANCE: Arc<Mutex<Option<Arc<CommonRpc>>>> = Arc::new(Mutex::new(None));
@@ -43,7 +43,7 @@ impl CommonRpc {
 
     pub async fn admin_rpc() -> Result<Arc<Self>, Box<dyn std::error::Error>> {
         let api_admin = ApiAdmin::instance()
-            .map_err(|e| Status::internal(format!("configuration loading failed: {}", e)))?;
+            .map_err(|e| Status::internal(format!("api_admin loading failed: {}", e)))?;
 
         let config = api_admin.lock().unwrap();
 

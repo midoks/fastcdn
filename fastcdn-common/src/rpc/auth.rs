@@ -32,7 +32,7 @@ impl AuthMiddleware {
 
         // 获取配置并验证凭据
         let api_node = ApiNode::instance()
-            .map_err(|e| Status::internal(format!("configuration loading failed: {}", e)))?;
+            .map_err(|e| Status::internal(format!("verify_request loading failed: {}", e)))?;
 
         let config = api_node.lock().unwrap();
 
@@ -64,7 +64,7 @@ impl AuthMiddleware {
 
         // 获取配置用于解密
         let api_node = ApiNode::instance()
-            .map_err(|e| Status::internal(format!("configuration loading failed: {}", e)))?;
+            .map_err(|e| Status::internal(format!("verify_admin_request loading failed: {}", e)))?;
         let config = api_node.lock().unwrap();
 
         // 使用AES解密
@@ -100,7 +100,7 @@ impl AuthMiddleware {
     /// 为客户端请求添加认证头
     pub fn add_header_api<T>(mut request: Request<T>) -> Result<Request<T>, Status> {
         let api_node = ApiNode::instance()
-            .map_err(|e| Status::internal(format!("configuration loading failed: {}", e)))?;
+            .map_err(|e| Status::internal(format!("add_header_api loading failed: {}", e)))?;
 
         let config = api_node.lock().unwrap();
 
@@ -146,9 +146,10 @@ impl AuthMiddleware {
 
     /// 添加管理员请求头信息
     pub fn add_header_admin<T>(mut request: Request<T>) -> Result<Request<T>, Status> {
-        let api_node = ApiNode::instance()
-            .map_err(|e| Status::internal(format!("configuration loading failed: {}", e)))?;
+        let api_node = crate::config::api_admin::ApiAdmin::instance()
+            .map_err(|e| Status::internal(format!("add_header_admin loading failed: {}", e)))?;
 
+        println!("add_header_admin:{:?}", api_node);
         let config = api_node.lock().unwrap();
 
         let timestamp = std::time::SystemTime::now()
