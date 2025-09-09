@@ -122,7 +122,6 @@ impl Setup {
         }
 
         // println!("api_token_data:{:?}", api_token_data);
-
         let mut api_node_id = fastcdn_common::orm::api_node::find_enabled_id_with_addr(
             protocol,
             host,
