@@ -18,11 +18,13 @@ mkdir -p dist/fastcdn/fastcdn-api/logs
 mkdir -p dist/fastcdn/fastcdn-api/data
 
 
+rm -rf ./dist/fastcdn/bin/fastcdn
 cp -rf ./target/release/fastcdn ./dist/fastcdn/bin/fastcdn
 cp -rf ./configs/server.yaml ./dist/fastcdn/configs/server.yaml
 
 
-cp -rf ./target/release/fastcdn-api ./dist/fastcdn/fastcdn-api/bin/fastcdn-api
+rm -rf ./dist/fastcdn/fastcdn-api/bin/fastcdn-api
+cp -rfp ./target/release/fastcdn-api ./dist/fastcdn/fastcdn-api/bin/fastcdn-api
 
 
 # fastcdn-node
@@ -30,4 +32,5 @@ mkdir -p dist/fastcdn-node/bin
 mkdir -p dist/fastcdn-node/configs
 
 
+rm -rf ./dist/fastcdn-node/bin/fastcdn-node
 cp -rf ./target/release/fastcdn-node ./dist/fastcdn-node/bin/fastcdn-node

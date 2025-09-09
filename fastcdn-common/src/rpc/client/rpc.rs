@@ -1,7 +1,14 @@
+use crate::config::api_admin::ApiAdmin;
 use crate::rpc::auth::AuthMiddleware;
-use tonic::codegen::*;
 use tonic::transport::Channel;
 use tonic::{Request, metadata::MetadataValue};
+use tonic::{Status, codegen::*};
+use lazy_static::lazy_static;
+use std::sync::{Arc, Mutex};
+
+lazy_static! {
+    static ref INSTANCE: Arc<Mutex<Option<Arc<CommonRpc>>>> = Arc::new(Mutex::new(None));
+}
 
 pub struct CommonRpc {
     channel: Channel,
@@ -15,6 +22,38 @@ pub enum RequestAuth {
 }
 
 impl CommonRpc {
+    pub async fn instance() -> Result<Arc<Self>, Box<dyn std::error::Error>> {
+        {
+            let instance = INSTANCE.lock().unwrap();
+            if let Some(rpc) = instance.as_ref() {
+                return Ok(rpc.clone());
+            }
+        }
+
+        // Create new instance if none exists
+        let rpc = Self::admin_rpc().await?;
+        {
+            let mut instance = INSTANCE.lock().unwrap();
+            if instance.is_none() {
+                *instance = Some(rpc.clone());
+            }
+        }
+        Ok(rpc)
+    }
+
+    pub async fn admin_rpc() -> Result<Arc<Self>, Box<dyn std::error::Error>> {
+        let api_admin = ApiAdmin::instance()
+            .map_err(|e| Status::internal(format!("configuration loading failed: {}", e)))?;
+
+        let config = api_admin.lock().unwrap();
+
+        let channel = Channel::from_shared(config.rpc_endpoints[0].to_string())?
+            .connect()
+            .await?;
+        let rpc = Arc::new(CommonRpc { channel });
+        Ok(rpc)
+    }
+
     pub async fn connect(addr: &str) -> Result<Self, Box<dyn std::error::Error>> {
         let channel = Channel::from_shared(addr.to_string())?.connect().await?;
         Ok(CommonRpc { channel })

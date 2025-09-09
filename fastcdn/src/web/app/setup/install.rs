@@ -1,6 +1,7 @@
 use actix_web::{Responder, get, post, web};
 use serde::{Deserialize, Serialize};
 use std::process::Command;
+use std::sync::Arc;
 
 // 必须为所有需要序列化/反序列化的结构体添加derive
 #[derive(Debug, Serialize, Deserialize)] // 添加Debug方便日志记录
@@ -30,7 +31,9 @@ pub struct InstallRequest {
 }
 
 #[post("/install")]
-pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
+pub async fn install_post(
+    req: web::Json<InstallRequest>,
+) -> Result<impl Responder, Box<dyn std::error::Error>> {
     // println!("{:?}", req);
 
     let config = fastcdn_common::db::pool::DbConfig {
@@ -39,23 +42,6 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
         dbname: req.dbname.clone(),
         username: req.username.clone(),
         password: req.password.clone(),
-    };
-
-    match fastcdn_common::db::pool::Manager::new().await {
-        Ok(db) => match db.test_connection(&config).await {
-            Ok(_) => web::Json(InstallResponse {
-                message: "ok".to_string(),
-                status: 0,
-            }),
-            Err(e) => web::Json(InstallResponse {
-                message: format!("error: {}", e),
-                status: -1,
-            }),
-        },
-        Err(e) => web::Json(InstallResponse {
-            message: format!("db error: {}", e),
-            status: -1,
-        }),
     };
 
     let db_yaml = fastcdn_common::config::db::Db {
@@ -67,8 +53,23 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
     let _ = db_yaml.write();
     let _ = db_yaml.write_api();
 
-    let mut result_map: serde_json::Value = serde_json::json!({});
+    // 测试db连接测试
+    if let Err(e) = fastcdn_common::db::pool::Manager::new().await {
+        return Ok(web::Json(InstallResponse {
+            message: format!("db error: {}", e),
+            status: -1,
+        }));
+    }
 
+    let db = fastcdn_common::db::pool::Manager::new().await?;
+    if let Err(e) = db.test_connection(&config).await {
+        return Ok(web::Json(InstallResponse {
+            message: format!("error: {}", e),
+            status: -1,
+        }));
+    }
+
+    let mut result_map: serde_json::Value = serde_json::json!({});
     if req.api_type == "new" {
         // 安装API节点
         let output = Command::new("bin/fastcdn-api")
@@ -80,15 +81,16 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
             .output()
             .expect("Failed to execute command");
 
+        // println!("output: {}", String::from_utf8_lossy(&output.stdout));
+        // println!("error: {}", String::from_utf8_lossy(&output.stderr));
         if !output.status.success() {
-            return web::Json(InstallResponse {
+            return Ok(web::Json(InstallResponse {
                 message: format!("install error: {}", String::from_utf8_lossy(&output.stderr)),
                 status: -1,
-            });
+            }));
         }
 
         result_map = serde_json::from_slice(&output.stdout).unwrap_or_default();
-        // println!("output: {}", String::from_utf8_lossy(&output.stdout));
         // println!("result_map:{}", result_map);
         // println!("result_map:{:?}", result_map.get("node_id"));
 
@@ -106,11 +108,9 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
             .arg("-d")
             .output()
             .expect("Failed to execute command");
-
-        println!("{}", req.api_type);
     } else if req.api_type == "old" {
-        println!("{}", req.api_type);
     }
+    println!("req.api_type: {:?}", req.api_type);
 
     let api_admin_yaml = fastcdn_common::config::api_admin::ApiAdmin {
         rpc_endpoints: vec![format!("http://{}:{}", req.api_host, req.api_port)],
@@ -126,13 +126,26 @@ pub async fn install_post(req: web::Json<InstallRequest>) -> impl Responder {
             .unwrap_or("")
             .to_string(),
     };
-
     let _ = api_admin_yaml.write();
 
-    web::Json(InstallResponse {
+    let mut admin_rpc = fastcdn_common::rpc::client::CommonRpc::admin_rpc().await?;
+
+    let req_admin = fastcdn_common::rpc::fastcdn::CreateOrUpdateAdminRequest {
+        username: req.admin_username.clone(),
+        password: req.admin_password.clone(),
+    };
+
+    let resp = Arc::get_mut(&mut admin_rpc)
+        .ok_or("Failed to get mutable reference to admin_rpc")?
+        .create_or_update_admin(req_admin)
+        .await?;
+
+    println!("{:?}", resp);
+
+    Ok(web::Json(InstallResponse {
         message: "ok".to_string(),
         status: 0,
-    })
+    }))
 }
 
 #[get("/install")]

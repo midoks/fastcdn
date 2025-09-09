@@ -82,8 +82,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             Ok("测试执行完成")
         }
         None => {
-            println!("欢迎使用 fastcdn 服务！");
-            println!("使用 --help 查看可用命令");
+            println!("welcome to the fastcdn service!");
+            println!("use --help to view available commands");
             Ok("")
         }
     };

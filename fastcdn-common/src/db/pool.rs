@@ -121,7 +121,9 @@ impl Manager {
 
         let pool = MySqlPool::connect(&database_url).await?;
         let row: (i32,) = sqlx::query_as("SELECT 1").fetch_one(&pool).await?;
-        println!("✓ 数据库连接测试成功，返回值: {}", row.0);
+        if row.0 != 1 {
+            return Err("link failed!".into());
+        }
         Ok(())
     }
 

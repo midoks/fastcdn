@@ -5,6 +5,7 @@ use crate::rpc::auth::AuthMiddleware;
 use crate::rpc::fastcdn::admin_server::Admin;
 use crate::rpc::fastcdn::{
     AdminCreateRequest, AdminCreateResponse, AdminLoginRequest, AdminLoginResponse,
+    CreateOrUpdateAdminRequest, CreateOrUpdateAdminResponse,
 };
 
 /// Admin 实现
@@ -13,6 +14,26 @@ pub struct FcAdmin {}
 
 #[tonic::async_trait]
 impl Admin for FcAdmin {
+    // 创建或修改管理员
+    async fn create_or_update_admin(
+        &self,
+        request: Request<CreateOrUpdateAdminRequest>,
+    ) -> Result<Response<CreateOrUpdateAdminResponse>, Status> {
+        // 验证请求头认证
+        AuthMiddleware::verify_request(&request)?;
+
+        println!("收到请求: {:?}", request);
+
+        let resp = CreateOrUpdateAdminResponse { id: 1 };
+
+        match pool::Manager::instance().await {
+            Ok(manager) => println!("数据库管理器实例: {:?}", manager),
+            Err(e) => println!("获取数据库管理器失败: {:?}", e),
+        }
+
+        Ok(Response::new(resp))
+    }
+
     async fn create(
         &self,
         request: Request<AdminCreateRequest>,
