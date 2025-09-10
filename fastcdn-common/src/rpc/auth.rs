@@ -77,20 +77,18 @@ impl AuthMiddleware {
         // 使用AES解密
         let cipher = crate::utils::aes::AesCfbCipher::new(256)
             .map_err(|e| Status::internal(format!("aes cipher creation failed: {}", e)))?;
-        
-        let secret = config[0].get("secret")
+
+        let secret = config[0]
+            .get("secret")
             .and_then(|v| v.as_str())
             .ok_or_else(|| Status::internal("secret field not found or not a string"))?;
-        let node_id_str = config[0].get("node_id")
+        let node_id_str = config[0]
+            .get("node_id")
             .and_then(|v| v.as_str())
             .ok_or_else(|| Status::internal("node_id field not found or not a string"))?;
-        
+
         let decrypted_header = cipher
-            .decrypt(
-                secret.as_bytes(),
-                node_id_str.as_bytes(),
-                &header_token,
-            )
+            .decrypt(secret.as_bytes(), node_id_str.as_bytes(), &header_token)
             .map_err(|e| Status::invalid_argument(format!("decryption header failed: {}", e)))?;
 
         let header_jstr = String::from_utf8(decrypted_header)
@@ -102,17 +100,19 @@ impl AuthMiddleware {
 
         // 验证 token 类型
         if header.r#type != "admin" {
-            return Err(Status::unauthenticated("invalid token type"));
+            return Err(Status::unauthenticated("invalid admin token type"));
         }
 
         // 验证凭据 - 简单验证node_id和token是否匹配配置
-        let config_node_id = config[0].get("node_id")
+        let config_node_id = config[0]
+            .get("node_id")
             .and_then(|v| v.as_str())
             .unwrap_or("");
-        let config_secret = config[0].get("secret")
+        let config_secret = config[0]
+            .get("secret")
             .and_then(|v| v.as_str())
             .unwrap_or("");
-        
+
         if config_node_id != node_id || config_secret != token {
             return Err(Status::unauthenticated("invalid node-id or token"));
         }
