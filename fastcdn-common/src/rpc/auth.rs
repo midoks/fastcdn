@@ -46,8 +46,7 @@ impl AuthMiddleware {
     pub async fn verify_admin_request<T>(request: &Request<T>) -> Result<(), Status> {
         let metadata = request.metadata();
 
-        println!("metadata:{:?}", metadata);
-
+        // println!("metadata:{:?}", metadata);
         let node_id = metadata
             .get("node-id")
             .and_then(|v| v.to_str().ok())
@@ -70,9 +69,6 @@ impl AuthMiddleware {
         if config.iter().len() < 1 {
             return Err(Status::invalid_argument("illegal node_id!"));
         }
-        println!("api_token data: {:?}", config);
-
-        println!("{:?}", config);
 
         // 使用AES解密
         let cipher = crate::utils::aes::AesCfbCipher::new(256)
@@ -102,21 +98,6 @@ impl AuthMiddleware {
         if header.r#type != "admin" {
             return Err(Status::unauthenticated("invalid admin token type"));
         }
-
-        // 验证凭据 - 简单验证node_id和token是否匹配配置
-        let config_node_id = config[0]
-            .get("node_id")
-            .and_then(|v| v.as_str())
-            .unwrap_or("");
-        let config_secret = config[0]
-            .get("secret")
-            .and_then(|v| v.as_str())
-            .unwrap_or("");
-
-        if config_node_id != node_id || config_secret != token {
-            return Err(Status::unauthenticated("invalid node-id or token"));
-        }
-
         Ok(())
     }
 

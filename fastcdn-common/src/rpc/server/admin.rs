@@ -22,7 +22,11 @@ impl Admin for FcAdmin {
         // 验证请求头认证
         AuthMiddleware::verify_admin_request(&request).await?;
 
-        println!("收到请求: {:?}", request);
+        println!("request: {:?}", request);
+
+        let inner_request = request.get_ref();
+        println!("request.username: {:?}", inner_request.username);
+        println!("request.password: {:?}", inner_request.password);
 
         let resp = CreateOrUpdateAdminResponse { id: 1 };
 
