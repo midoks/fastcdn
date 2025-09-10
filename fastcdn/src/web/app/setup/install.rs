@@ -93,7 +93,7 @@ pub async fn install_post(
             }));
         }
 
-        println!("output: {}", String::from_utf8_lossy(&output.stdout));
+        // println!("output: {}", String::from_utf8_lossy(&output.stdout));
         result_map = serde_json::from_slice(&output.stdout).unwrap_or_default();
         // println!("result_map:{:?}", result_map);
 

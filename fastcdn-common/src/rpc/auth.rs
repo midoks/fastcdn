@@ -43,7 +43,7 @@ impl AuthMiddleware {
         Ok(())
     }
 
-    pub fn verify_admin_request<T>(request: &Request<T>) -> Result<(), Status> {
+    pub async fn verify_admin_request<T>(request: &Request<T>) -> Result<(), Status> {
         let metadata = request.metadata();
 
         println!("metadata:{:?}", metadata);
@@ -62,18 +62,33 @@ impl AuthMiddleware {
             .decode(&token)
             .map_err(|e| Status::invalid_argument(format!("decode token failed: {}", e)))?;
 
-        // 获取配置用于解密
-        let api_admin = crate::config::api_admin::ApiAdmin::instance()
-            .map_err(|e| Status::internal(format!("verify_admin_request loading failed: {}", e)))?;
-        let config = api_admin.lock().unwrap();
+        // 配置用于解密
+        let config = crate::orm::api_token::get_by_node_id(node_id)
+            .await
+            .map_err(|e| Status::internal(format!("database query failed: {}", e)))?;
+
+        if config.iter().len() < 1 {
+            return Err(Status::invalid_argument("illegal node_id!"));
+        }
+        println!("api_token data: {:?}", config);
+
+        println!("{:?}", config);
 
         // 使用AES解密
         let cipher = crate::utils::aes::AesCfbCipher::new(256)
             .map_err(|e| Status::internal(format!("aes cipher creation failed: {}", e)))?;
+        
+        let secret = config[0].get("secret")
+            .and_then(|v| v.as_str())
+            .ok_or_else(|| Status::internal("secret field not found or not a string"))?;
+        let node_id_str = config[0].get("node_id")
+            .and_then(|v| v.as_str())
+            .ok_or_else(|| Status::internal("node_id field not found or not a string"))?;
+        
         let decrypted_header = cipher
             .decrypt(
-                config.secret.as_bytes(),
-                config.node_id.as_bytes(),
+                secret.as_bytes(),
+                node_id_str.as_bytes(),
                 &header_token,
             )
             .map_err(|e| Status::invalid_argument(format!("decryption header failed: {}", e)))?;
@@ -90,8 +105,15 @@ impl AuthMiddleware {
             return Err(Status::unauthenticated("invalid token type"));
         }
 
-        // 验证凭据
-        if !config.verify_credentials(node_id, token) {
+        // 验证凭据 - 简单验证node_id和token是否匹配配置
+        let config_node_id = config[0].get("node_id")
+            .and_then(|v| v.as_str())
+            .unwrap_or("");
+        let config_secret = config[0].get("secret")
+            .and_then(|v| v.as_str())
+            .unwrap_or("");
+        
+        if config_node_id != node_id || config_secret != token {
             return Err(Status::unauthenticated("invalid node-id or token"));
         }
 

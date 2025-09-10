@@ -20,7 +20,7 @@ impl Admin for FcAdmin {
         request: Request<CreateOrUpdateAdminRequest>,
     ) -> Result<Response<CreateOrUpdateAdminResponse>, Status> {
         // 验证请求头认证
-        AuthMiddleware::verify_admin_request(&request)?;
+        AuthMiddleware::verify_admin_request(&request).await?;
 
         println!("收到请求: {:?}", request);
 
@@ -61,7 +61,7 @@ impl Admin for FcAdmin {
     ) -> Result<Response<AdminLoginResponse>, Status> {
         println!("login----service");
         // 验证请求头认证
-        AuthMiddleware::verify_admin_request(&request)?;
+        AuthMiddleware::verify_admin_request(&request).await?;
 
         let login_req = request.into_inner();
         println!("admin login username: {:?}", login_req.username);

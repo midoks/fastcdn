@@ -11,6 +11,19 @@ pub async fn get_by_role(name: &str) -> Result<Vec<serde_json::Value>, Box<dyn s
     Ok(results)
 }
 
+pub async fn get_by_node_id(
+    node_id: &str,
+) -> Result<Vec<serde_json::Value>, Box<dyn std::error::Error>> {
+    let db = pool::Manager::instance().await?;
+    let table_name = db.get_table_name("api_tokens");
+    let query = db
+        .query_builder(&table_name)
+        .select(&["id", "node_id", "secret", "role"])
+        .where_eq("node_id", node_id);
+    let results = db.query_with_builder(query).await?;
+    Ok(results)
+}
+
 pub async fn find_enabled_token_with_role(
     name: &str,
 ) -> Result<Vec<serde_json::Value>, Box<dyn std::error::Error>> {
