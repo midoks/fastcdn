@@ -69,6 +69,8 @@ impl TableColumns {
 
         // 针对MySQL v8.0.17以后
         let x = sanitize_definition(def);
+
+        println!("{:?}", x);
         if x == local_def {
             return true;
         }
@@ -219,7 +221,12 @@ impl pool::Manager {
     /// 返回包含所有表名的字符串向量
     pub async fn table_names(&self) -> Result<Vec<String>, Box<dyn std::error::Error>> {
         let query = "SHOW TABLES";
-        let pool = self.get_pool().ok_or_else(|| Box::new(std::io::Error::new(std::io::ErrorKind::NotConnected, "数据库连接池未初始化")) as Box<dyn std::error::Error>)?;
+        let pool = self.get_pool().ok_or_else(|| {
+            Box::new(std::io::Error::new(
+                std::io::ErrorKind::NotConnected,
+                "database connection pool is not initialized",
+            )) as Box<dyn std::error::Error>
+        })?;
         let rows = sqlx::query(query).fetch_all(pool.as_ref()).await?;
 
         let mut table_names = Vec::new();
@@ -238,10 +245,13 @@ impl pool::Manager {
     ) -> Result<TableInfo, Box<dyn std::error::Error>> {
         // 获取表的创建语句
         let create_query = format!("SHOW CREATE TABLE `{}`", table_name);
-        let pool = self.get_pool().ok_or_else(|| Box::new(std::io::Error::new(std::io::ErrorKind::NotConnected, "数据库连接池未初始化")) as Box<dyn std::error::Error>)?;
-        let create_row = sqlx::query(&create_query)
-            .fetch_one(pool.as_ref())
-            .await?;
+        let pool = self.get_pool().ok_or_else(|| {
+            Box::new(std::io::Error::new(
+                std::io::ErrorKind::NotConnected,
+                "database connection pool is not initialized",
+            )) as Box<dyn std::error::Error>
+        })?;
+        let create_row = sqlx::query(&create_query).fetch_one(pool.as_ref()).await?;
 
         let create_statement: String = create_row.try_get(1)?; // 第二列是 Create Table
 
@@ -259,7 +269,12 @@ impl pool::Manager {
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ?
         ORDER BY ORDINAL_POSITION";
 
-        let pool = self.get_pool().ok_or_else(|| Box::new(std::io::Error::new(std::io::ErrorKind::NotConnected, "数据库连接池未初始化")) as Box<dyn std::error::Error>)?;
+        let pool = self.get_pool().ok_or_else(|| {
+            Box::new(std::io::Error::new(
+                std::io::ErrorKind::NotConnected,
+                "database connection pool is not initialized",
+            )) as Box<dyn std::error::Error>
+        })?;
         let column_rows = sqlx::query(columns_query)
             .bind(table_name)
             .fetch_all(pool.as_ref())
@@ -294,7 +309,12 @@ impl pool::Manager {
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ?
         ORDER BY INDEX_NAME, SEQ_IN_INDEX";
 
-        let pool = self.get_pool().ok_or_else(|| Box::new(std::io::Error::new(std::io::ErrorKind::NotConnected, "数据库连接池未初始化")) as Box<dyn std::error::Error>)?;
+        let pool = self.get_pool().ok_or_else(|| {
+            Box::new(std::io::Error::new(
+                std::io::ErrorKind::NotConnected,
+                "database connection pool is not initialized",
+            )) as Box<dyn std::error::Error>
+        })?;
         let index_rows = sqlx::query(indexes_query)
             .bind(table_name)
             .fetch_all(pool.as_ref())
@@ -345,7 +365,12 @@ impl pool::Manager {
         FROM INFORMATION_SCHEMA.PARTITIONS 
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND PARTITION_NAME IS NOT NULL";
 
-        let pool = self.get_pool().ok_or_else(|| Box::new(std::io::Error::new(std::io::ErrorKind::NotConnected, "数据库连接池未初始化")) as Box<dyn std::error::Error>)?;
+        let pool = self.get_pool().ok_or_else(|| {
+            Box::new(std::io::Error::new(
+                std::io::ErrorKind::NotConnected,
+                "database connection pool is not initialized",
+            )) as Box<dyn std::error::Error>
+        })?;
         let partition_rows = sqlx::query(partitions_query)
             .bind(table_name)
             .fetch_all(pool.as_ref())

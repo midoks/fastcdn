@@ -22,7 +22,7 @@ action:
   # - ./build_web.sh
   - ./build_dist.sh
   # - ./target/release/fastcdn-api setup --protocol=http --host=127.0.0.1 --port 10001
-  # - cd ./dist/fastcdn && ./fastcdn-api/bin/fastcdn-api start -d
+  # - cd ./dist/fastcdn/fastcdn-api && ./bin/fastcdn-api start -d
   # - cd ./dist/fastcdn && ./bin/fastcdn start -d
   # - cd ./dist/fastcdn-node && ./bin/fastcdn-node start -d
   # - cd ./dist/fastcdn && ./bin/fastcdn test
