@@ -70,7 +70,7 @@ impl TableColumns {
         // 针对MySQL v8.0.17以后
         let x = sanitize_definition(def);
 
-        println!("{:?}", x);
+        // println!("{:?}", x);
         if x == local_def {
             return true;
         }
