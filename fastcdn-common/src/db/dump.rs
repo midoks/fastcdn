@@ -155,7 +155,12 @@ impl TableInfo {
         // print!("dbxxx_sql: {:?}\n", db_sql);
         if db_sql == def {
             return true;
+        } else {
+            // if self.table_name == "fastcdn_admin" {
+            // print!("embed_sql: {:?}\nlocdb_sql: {:?}\n", def, db_sql);
+            // }
         }
+
         false
     }
 
