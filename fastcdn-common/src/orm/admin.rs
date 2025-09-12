@@ -1,13 +1,38 @@
 use crate::{db::pool, utils};
 
 pub async fn count() -> Result<i64, Box<dyn std::error::Error + Send + Sync>> {
-    let db = pool::Manager::instance().await.map_err(|e| -> Box<dyn std::error::Error + Send + Sync> { Box::new(std::io::Error::new(std::io::ErrorKind::Other, e.to_string())) })?;
-    let results = db.count("admin", None).await.map_err(|e| -> Box<dyn std::error::Error + Send + Sync> { Box::new(std::io::Error::new(std::io::ErrorKind::Other, e.to_string())) })?;
+    let db = pool::Manager::instance().await.map_err(
+        |e| -> Box<dyn std::error::Error + Send + Sync> {
+            Box::new(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string(),
+            ))
+        },
+    )?;
+    let results =
+        db.count("admin", None)
+            .await
+            .map_err(|e| -> Box<dyn std::error::Error + Send + Sync> {
+                Box::new(std::io::Error::new(
+                    std::io::ErrorKind::Other,
+                    e.to_string(),
+                ))
+            })?;
     Ok(results)
 }
 
-pub async fn update_admin_password(id: u64, password: &str) -> Result<bool, Box<dyn std::error::Error + Send + Sync>> {
-    let db = pool::Manager::instance().await.map_err(|e| -> Box<dyn std::error::Error + Send + Sync> { Box::new(std::io::Error::new(std::io::ErrorKind::Other, e.to_string())) })?;
+pub async fn update_admin_password(
+    id: u64,
+    password: &str,
+) -> Result<bool, Box<dyn std::error::Error + Send + Sync>> {
+    let db = pool::Manager::instance().await.map_err(
+        |e| -> Box<dyn std::error::Error + Send + Sync> {
+            Box::new(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string(),
+            ))
+        },
+    )?;
     let table_name = db.get_table_name("admin");
 
     let update = db
@@ -15,7 +40,14 @@ pub async fn update_admin_password(id: u64, password: &str) -> Result<bool, Box<
         .set_str("password", password)
         .where_id(id);
 
-    let affected = db.update_with_builder(update).await.map_err(|e| -> Box<dyn std::error::Error + Send + Sync> { Box::new(std::io::Error::new(std::io::ErrorKind::Other, e.to_string())) })?;
+    let affected = db.update_with_builder(update).await.map_err(
+        |e| -> Box<dyn std::error::Error + Send + Sync> {
+            Box::new(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string(),
+            ))
+        },
+    )?;
 
     Ok(affected > 0)
 }
@@ -23,7 +55,14 @@ pub async fn update_admin_password(id: u64, password: &str) -> Result<bool, Box<
 pub async fn find_admin_id_with_username(
     username: &str,
 ) -> Result<Vec<serde_json::Value>, Box<dyn std::error::Error + Send + Sync>> {
-    let db = pool::Manager::instance().await.map_err(|e| -> Box<dyn std::error::Error + Send + Sync> { Box::new(std::io::Error::new(std::io::ErrorKind::Other, e.to_string())) })?;
+    let db = pool::Manager::instance().await.map_err(
+        |e| -> Box<dyn std::error::Error + Send + Sync> {
+            Box::new(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string(),
+            ))
+        },
+    )?;
 
     let table_name = db.get_table_name("admin");
     let query = db
@@ -77,6 +116,7 @@ pub async fn add(
     );
     data.insert("is_on".to_string(), serde_json::Value::Bool(is_on));
     data.insert("is_super".to_string(), serde_json::Value::Bool(is_super));
+    data.insert("can_login".to_string(), serde_json::Value::Bool(can_login));
     data.insert("state".to_string(), serde_json::Value::Bool(state));
     data.insert(
         "theme".to_string(),

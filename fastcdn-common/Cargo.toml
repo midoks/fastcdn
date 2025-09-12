@@ -23,6 +23,7 @@ generic-array = "0.14"  # 用于固定大小数组
 base64 = "0.22.1"
 rand = "0.8"
 md5 = "0.7"
+bcrypt = "0.15"
 
 [build-dependencies]
 tonic-build = "0.12"
