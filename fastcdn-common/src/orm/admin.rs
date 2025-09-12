@@ -1,8 +1,22 @@
 use crate::{db::pool, utils};
 
-pub async fn count() -> Result<i64, Box<dyn std::error::Error>> {
-    let db = pool::Manager::instance().await?;
-    let results = db.count("admin", None).await?;
+pub async fn count() -> Result<i64, Box<dyn std::error::Error + Send + Sync>> {
+    let db = pool::Manager::instance().await.map_err(|e| -> Box<dyn std::error::Error + Send + Sync> { Box::new(std::io::Error::new(std::io::ErrorKind::Other, e.to_string())) })?;
+    let results = db.count("admin", None).await.map_err(|e| -> Box<dyn std::error::Error + Send + Sync> { Box::new(std::io::Error::new(std::io::ErrorKind::Other, e.to_string())) })?;
+    Ok(results)
+}
+
+pub async fn find_admin_id_with_username(
+    username: &str,
+) -> Result<Vec<serde_json::Value>, Box<dyn std::error::Error + Send + Sync>> {
+    let db = pool::Manager::instance().await.map_err(|e| -> Box<dyn std::error::Error + Send + Sync> { Box::new(std::io::Error::new(std::io::ErrorKind::Other, e.to_string())) })?;
+
+    let table_name = db.get_table_name("admin");
+    let query = db
+        .query_builder(&table_name)
+        .select(&["id"])
+        .where_eq("username", username);
+    let results = db.query_with_builder(query).await.map_err(|e| -> Box<dyn std::error::Error + Send + Sync> { Box::new(std::io::Error::new(std::io::ErrorKind::Other, e.to_string())) })?;
     Ok(results)
 }
 
@@ -16,8 +30,8 @@ pub async fn add(
     theme: bool,
     lang: &str,
     state: bool,
-) -> Result<u64, Box<dyn std::error::Error>> {
-    let db = pool::Manager::instance().await?;
+) -> Result<u64, Box<dyn std::error::Error + Send + Sync>> {
+    let db = pool::Manager::instance().await.map_err(|e| -> Box<dyn std::error::Error + Send + Sync> { Box::new(std::io::Error::new(std::io::ErrorKind::Other, e.to_string())) })?;
     let time_unix = utils::time::now_unix();
     let mut data = std::collections::HashMap::new();
     data.insert(
@@ -32,18 +46,9 @@ pub async fn add(
         "fullname".to_string(),
         serde_json::Value::String(fullname.to_string()),
     );
-    data.insert(
-        "is_on".to_string(),
-        serde_json::Value::Bool(is_on),
-    );
-    data.insert(
-        "is_super".to_string(),
-        serde_json::Value::Bool(is_super),
-    );
-    data.insert(
-        "state".to_string(),
-        serde_json::Value::Bool(state),
-    );
+    data.insert("is_on".to_string(), serde_json::Value::Bool(is_on));
+    data.insert("is_super".to_string(), serde_json::Value::Bool(is_super));
+    data.insert("state".to_string(), serde_json::Value::Bool(state));
     data.insert(
         "theme".to_string(),
         serde_json::Value::String(theme.to_string()),
@@ -61,6 +66,6 @@ pub async fn add(
         serde_json::Value::String(time_unix),
     );
 
-    let id = db.insert("admin", &data).await?;
+    let id = db.insert("admin", &data).await.map_err(|e| -> Box<dyn std::error::Error + Send + Sync> { Box::new(std::io::Error::new(std::io::ErrorKind::Other, e.to_string())) })?;
     Ok(id)
 }

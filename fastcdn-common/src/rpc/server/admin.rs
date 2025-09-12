@@ -1,6 +1,7 @@
 use tonic::{Request, Response, Status};
 
 use crate::db::pool;
+use crate::orm;
 use crate::rpc::auth::AuthMiddleware;
 use crate::rpc::fastcdn::admin_server::Admin;
 use crate::rpc::fastcdn::{
@@ -22,18 +23,27 @@ impl Admin for FcAdmin {
         // 验证请求头认证
         AuthMiddleware::verify_admin_request(&request).await?;
 
-        println!("request: {:?}", request);
-
         let inner_request = request.get_ref();
         println!("request.username: {:?}", inner_request.username);
         println!("request.password: {:?}", inner_request.password);
 
-        let resp = CreateOrUpdateAdminResponse { id: 1 };
+        let adminid = orm::admin::find_admin_id_with_username(&inner_request.username).await;
 
-        match pool::Manager::instance().await {
-            Ok(manager) => println!("数据库管理器实例: {:?}", manager),
-            Err(e) => println!("获取数据库管理器失败: {:?}", e),
-        }
+        println!("{:?}", adminid);
+
+        // let admin_id = orm::admin::add(
+        //     inner_request.username,
+        //     inner_request.password,
+        //     inner_request.username,
+        //     true,
+        //     true,
+        //     true,
+        //     "zz",
+        //     "cn",
+        //     true,
+        // );
+
+        let resp = CreateOrUpdateAdminResponse { id: 1 };
 
         Ok(Response::new(resp))
     }
