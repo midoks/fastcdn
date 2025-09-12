@@ -6,6 +6,20 @@ pub async fn count() -> Result<i64, Box<dyn std::error::Error + Send + Sync>> {
     Ok(results)
 }
 
+pub async fn update_admin_password(id: u64, password: &str) -> Result<bool, Box<dyn std::error::Error + Send + Sync>> {
+    let db = pool::Manager::instance().await.map_err(|e| -> Box<dyn std::error::Error + Send + Sync> { Box::new(std::io::Error::new(std::io::ErrorKind::Other, e.to_string())) })?;
+    let table_name = db.get_table_name("admin");
+
+    let update = db
+        .update_builder("admin")
+        .set_str("password", password)
+        .where_id(id);
+
+    let affected = db.update_with_builder(update).await.map_err(|e| -> Box<dyn std::error::Error + Send + Sync> { Box::new(std::io::Error::new(std::io::ErrorKind::Other, e.to_string())) })?;
+
+    Ok(affected > 0)
+}
+
 pub async fn find_admin_id_with_username(
     username: &str,
 ) -> Result<Vec<serde_json::Value>, Box<dyn std::error::Error + Send + Sync>> {
@@ -15,8 +29,16 @@ pub async fn find_admin_id_with_username(
     let query = db
         .query_builder(&table_name)
         .select(&["id"])
+        .limit(1)
         .where_eq("username", username);
-    let results = db.query_with_builder(query).await.map_err(|e| -> Box<dyn std::error::Error + Send + Sync> { Box::new(std::io::Error::new(std::io::ErrorKind::Other, e.to_string())) })?;
+    let results = db.query_with_builder(query).await.map_err(
+        |e| -> Box<dyn std::error::Error + Send + Sync> {
+            Box::new(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string(),
+            ))
+        },
+    )?;
     Ok(results)
 }
 
@@ -31,7 +53,14 @@ pub async fn add(
     lang: &str,
     state: bool,
 ) -> Result<u64, Box<dyn std::error::Error + Send + Sync>> {
-    let db = pool::Manager::instance().await.map_err(|e| -> Box<dyn std::error::Error + Send + Sync> { Box::new(std::io::Error::new(std::io::ErrorKind::Other, e.to_string())) })?;
+    let db = pool::Manager::instance().await.map_err(
+        |e| -> Box<dyn std::error::Error + Send + Sync> {
+            Box::new(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string(),
+            ))
+        },
+    )?;
     let time_unix = utils::time::now_unix();
     let mut data = std::collections::HashMap::new();
     data.insert(
@@ -66,6 +95,13 @@ pub async fn add(
         serde_json::Value::String(time_unix),
     );
 
-    let id = db.insert("admin", &data).await.map_err(|e| -> Box<dyn std::error::Error + Send + Sync> { Box::new(std::io::Error::new(std::io::ErrorKind::Other, e.to_string())) })?;
+    let id = db.insert("admin", &data).await.map_err(
+        |e| -> Box<dyn std::error::Error + Send + Sync> {
+            Box::new(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string(),
+            ))
+        },
+    )?;
     Ok(id)
 }

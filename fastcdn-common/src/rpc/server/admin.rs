@@ -27,23 +27,36 @@ impl Admin for FcAdmin {
         println!("request.username: {:?}", inner_request.username);
         println!("request.password: {:?}", inner_request.password);
 
-        let adminid = orm::admin::find_admin_id_with_username(&inner_request.username).await;
+        let adminids = orm::admin::find_admin_id_with_username(&inner_request.username)
+            .await
+            .map_err(|e| Status::internal(e.to_string()))?;
 
-        println!("{:?}", adminid);
+        println!("{:?}", adminids);
 
-        // let admin_id = orm::admin::add(
-        //     inner_request.username,
-        //     inner_request.password,
-        //     inner_request.username,
-        //     true,
-        //     true,
-        //     true,
-        //     "zz",
-        //     "cn",
-        //     true,
-        // );
+        let mut resp = CreateOrUpdateAdminResponse { id: 0 };
+        if adminids.len() > 0 {
+            let admin_id = adminids[0]["id"].as_u64().unwrap_or(0);
+            orm::admin::update_admin_password(admin_id, &inner_request.password)
+                .await
+                .map_err(|e| Status::internal(e.to_string()))?;
 
-        let resp = CreateOrUpdateAdminResponse { id: 1 };
+            resp.id = admin_id as i64;
+        } else {
+            let admin_id = orm::admin::add(
+                &inner_request.username,
+                &inner_request.password,
+                &inner_request.username,
+                true,
+                true,
+                true,
+                true,
+                "cn",
+                true,
+            )
+            .await
+            .map_err(|e| Status::internal(e.to_string()))?;
+            resp.id = admin_id as i64;
+        }
 
         Ok(Response::new(resp))
     }
