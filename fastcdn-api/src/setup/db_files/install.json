@@ -16,7 +16,7 @@
                 },
                 {
                     "name": "password",
-                    "definition": "varchar(32) COMMENT '密码'"
+                    "definition": "varchar(255) COMMENT '密码'"
                 },
                 {
                     "name": "fullname",
