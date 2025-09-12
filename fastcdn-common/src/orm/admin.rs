@@ -36,7 +36,7 @@ pub async fn update_admin_password(
     let table_name = db.get_table_name("admin");
 
     let update = db
-        .update_builder("admin")
+        .update_builder(table_name)
         .set_str("password", password)
         .where_id(id);
 
