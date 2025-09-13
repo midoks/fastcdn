@@ -15,23 +15,48 @@ pub struct FcAdmin {}
 
 #[tonic::async_trait]
 impl Admin for FcAdmin {
+    async fn login(
+        &self,
+        request: Request<AdminLoginRequest>,
+    ) -> Result<Response<AdminLoginResponse>, Status> {
+        // 验证请求头认证
+        AuthMiddleware::verify_admin_request(&request).await?;
+
+        let login_req = request.into_inner();
+        println!("admin login username: {:?}", login_req.username);
+        println!("admin login password: {:?}", login_req.password);
+
+        let reply = AdminLoginResponse {
+            id: -1,       // 用户ID
+            is_ok: false, // 登录是否成功
+            message: "登陆失败".to_string(),
+        };
+
+        match pool::Manager::instance().await {
+            Ok(db) => {
+                println!("db: {:?}", db);
+                println!("addr: {:p}", &db);
+            }
+            Err(e) => {
+                println!("db manager fail: {:?}", e);
+            }
+        }
+
+        Ok(Response::new(reply))
+    }
+
     // 创建或修改管理员
     async fn create_or_update_admin(
         &self,
         request: Request<CreateOrUpdateAdminRequest>,
     ) -> Result<Response<CreateOrUpdateAdminResponse>, Status> {
-        // 验证请求头认证
         AuthMiddleware::verify_admin_request(&request).await?;
 
         let inner_request = request.get_ref();
-        // println!("request.username: {:?}", inner_request.username);
-        // println!("request.password: {:?}", inner_request.password);
 
         let adminids = orm::admin::find_admin_id_with_username(&inner_request.username)
             .await
             .map_err(|e| Status::internal(e.to_string()))?;
-
-        // println!("{:?}", adminids);
 
         let mut resp = CreateOrUpdateAdminResponse { id: 0 };
         if adminids.len() > 0 {
@@ -69,8 +94,6 @@ impl Admin for FcAdmin {
         // 验证请求头认证
         AuthMiddleware::verify_request(&request)?;
 
-        println!("收到 admin create 请求: {:?}", request);
-
         let reply = AdminCreateResponse {
             id: 1, // 示例ID，实际应该从数据库生成
         };
@@ -78,37 +101,6 @@ impl Admin for FcAdmin {
         match pool::Manager::instance().await {
             Ok(manager) => println!("数据库管理器实例: {:?}", manager),
             Err(e) => println!("获取数据库管理器失败: {:?}", e),
-        }
-
-        Ok(Response::new(reply))
-    }
-
-    async fn login(
-        &self,
-        request: Request<AdminLoginRequest>,
-    ) -> Result<Response<AdminLoginResponse>, Status> {
-        println!("login----service");
-        // 验证请求头认证
-        AuthMiddleware::verify_admin_request(&request).await?;
-
-        let login_req = request.into_inner();
-        println!("admin login username: {:?}", login_req.username);
-        println!("admin login password: {:?}", login_req.password);
-
-        let reply = AdminLoginResponse {
-            id: -1,       // 用户ID
-            is_ok: false, // 登录是否成功
-            message: "登陆失败".to_string(),
-        };
-
-        match pool::Manager::instance().await {
-            Ok(db) => {
-                println!("db: {:?}", db);
-                println!("addr: {:p}", &db);
-            }
-            Err(e) => {
-                println!("db manager fail: {:?}", e);
-            }
         }
 
         Ok(Response::new(reply))
