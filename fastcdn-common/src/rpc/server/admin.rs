@@ -74,7 +74,7 @@ impl Admin for FcAdmin {
                 true,
                 true,
                 true,
-                true,
+                "zh",
                 "zh",
                 true,
             )
