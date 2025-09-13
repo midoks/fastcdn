@@ -21,11 +21,7 @@ const MOCK_USER_OPTIONS: BasicOption[] = [
     {
         label: 'Admin',
         value: 'admin',
-    },
-    {
-        label: 'User',
-        value: 'jack',
-    },
+    }
 ];
 
 const formSchema = computed((): VbenFormSchema[] => {

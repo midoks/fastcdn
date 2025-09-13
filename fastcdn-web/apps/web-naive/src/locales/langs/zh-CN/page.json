@@ -4,7 +4,10 @@
         "register": "注册",
         "codeLogin": "验证码登录",
         "qrcodeLogin": "二维码登录",
-        "forgetPassword": "忘记密码"
+        "forgetPassword": "忘记密码",
+        "setup": {
+            "title": "系统安装"
+        }
     },
     "dashboard": {
         "title": "概览",
@@ -23,9 +26,9 @@
         "description": "感谢您选择使用FastCDN系统，下面让我们一起开始配置系统。",
         "steps": {
             "introduction": "介绍",
-            "apiConfig": "API节点",
-            "database": "MySQL数据库",
-            "admin": "管理员账号",
+            "apiConfig": "设置API节点",
+            "database": "设置MySQL数据库",
+            "admin": "设置管理员账号",
             "complete": "完成安装"
         },
         "step1": {
@@ -37,13 +40,11 @@
         },
         "step2": {
             "api_type":"API节点类型",
-            "title": "API节点",
+            "title": "设置API节点",
             "description": "配置API服务器连接信息",
-            "host": "主机地址",
-            "port": "服务端口",
-            "protocol": "节点协议",
-            "node_id": "节点nodeId",
-            "secret": "节点secret"
+            "host": "API主机地址",
+            "port": "API端口",
+            "protocol": "协议类型"
         },
         "step3": {
             "database": "数据库名称",
