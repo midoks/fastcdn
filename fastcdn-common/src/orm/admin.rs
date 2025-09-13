@@ -12,6 +12,7 @@ pub async fn update_admin_password(
 ) -> Result<bool, Box<dyn std::error::Error>> {
     let db = pool::Manager::instance().await?;
 
+    let time_unix = utils::time::now_unix();
     let salt = utils::rand::string(5);
     let password_salt = format!("{}.{}", password, salt);
     let hash_pw = utils::common::password_hash(&password_salt)?;
@@ -20,6 +21,7 @@ pub async fn update_admin_password(
         .update_builder("admin")
         .set_str("password", &hash_pw)
         .set_str("salt", &salt)
+        .set_str("updated_at", &time_unix)
         .where_id(id);
     let affected = db.update_with_builder(update).await?;
 
@@ -30,6 +32,8 @@ pub async fn find_admin_id_with_username(
     username: &str,
 ) -> Result<Vec<serde_json::Value>, Box<dyn std::error::Error>> {
     let db = pool::Manager::instance().await?;
+
+    let time_unix = utils::time::now_unix();
 
     let table_name = db.get_table_name("admin");
     let query = db
