@@ -52,7 +52,7 @@ pub async fn add(
     is_on: bool,
     is_super: bool,
     can_login: bool,
-    theme: bool,
+    theme: &str,
     lang: &str,
     state: bool,
 ) -> Result<u64, Box<dyn std::error::Error>> {
