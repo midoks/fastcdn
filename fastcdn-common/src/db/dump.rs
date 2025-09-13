@@ -26,6 +26,44 @@ pub struct TableColumns {
     pub comment: String,
 }
 
+/// 数据库表-索引信息数据结构体
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct TableIndexColumns {
+    pub collation: String,
+    pub name: String,
+    pub seq_in_index: u32,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct TableIndexes {
+    pub name: String,
+    pub index_type: String,
+    pub unique: bool,
+    pub columns: Vec<TableIndexColumns>,
+}
+
+/// 数据库表-分区信息数据结构体
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct TablePartitions {
+    pub name: String,
+    pub method: String,
+    pub expression: String,
+    pub description: String,
+    pub rows: i64,
+    pub data_length: i64,
+    pub index_length: i64,
+}
+
+/// 数据库表信息数据结构体
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct TableInfo {
+    pub table_name: String,
+    pub create_statement: String,
+    pub columns: Vec<TableColumns>,
+    pub indexes: Vec<TableIndexes>,
+    pub partitions: Vec<TablePartitions>,
+}
+
 impl TableColumns {
     pub async fn definition(&self) -> String {
         let mut definition = String::new();
@@ -63,35 +101,18 @@ impl TableColumns {
 
     pub async fn eq_definition(&self, def: &str) -> bool {
         let local_def = self.definition().await;
+
         if local_def == def {
             return true;
         }
 
         // 针对MySQL v8.0.17以后
-        let x = sanitize_definition(def);
-
-        // println!("{:?}", x);
-        if x == local_def {
-            return true;
-        }
+        // let x = sanitize_definition(def);
+        // if x == local_def {
+        //     return true;
+        // }
         false
     }
-}
-
-/// 数据库表-索引信息数据结构体
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct TableIndexColumns {
-    pub collation: String,
-    pub name: String,
-    pub seq_in_index: u32,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct TableIndexes {
-    pub name: String,
-    pub index_type: String,
-    pub unique: bool,
-    pub columns: Vec<TableIndexColumns>,
 }
 
 impl TableIndexes {
@@ -123,28 +144,6 @@ impl TableIndexes {
     }
 }
 
-/// 数据库表-分区信息数据结构体
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct TablePartitions {
-    pub name: String,
-    pub method: String,
-    pub expression: String,
-    pub description: String,
-    pub rows: i64,
-    pub data_length: i64,
-    pub index_length: i64,
-}
-
-/// 数据库表信息数据结构体
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct TableInfo {
-    pub table_name: String,
-    pub create_statement: String,
-    pub columns: Vec<TableColumns>,
-    pub indexes: Vec<TableIndexes>,
-    pub partitions: Vec<TablePartitions>,
-}
-
 impl TableInfo {
     pub async fn eq_definition(&self, def: &str) -> bool {
         let db_sql = self
@@ -153,11 +152,16 @@ impl TableInfo {
 
         // print!("embed_sql: {:?}\n", def);
         // print!("dbxxx_sql: {:?}\n", db_sql);
+        // println!(
+        //     "compare table def: {:?} -> {:?}",
+        //     self.table_name,
+        //     db_sql == def
+        // );
         if db_sql == def {
             return true;
         } else {
             // if self.table_name == "fastcdn_admin" {
-            // print!("embed_sql: {:?}\nlocdb_sql: {:?}\n", def, db_sql);
+            //     print!("embed_sql: {:?}\nlocdb_sql: {:?}\n", def, db_sql);
             // }
         }
 

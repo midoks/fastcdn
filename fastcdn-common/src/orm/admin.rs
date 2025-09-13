@@ -1,54 +1,26 @@
 use crate::{db::pool, utils};
 
-pub async fn count() -> Result<i64, Box<dyn std::error::Error + Send + Sync>> {
-    let db = pool::Manager::instance().await.map_err(
-        |e| -> Box<dyn std::error::Error + Send + Sync> {
-            Box::new(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                e.to_string(),
-            ))
-        },
-    )?;
-    let results =
-        db.count("admin", None)
-            .await
-            .map_err(|e| -> Box<dyn std::error::Error + Send + Sync> {
-                Box::new(std::io::Error::new(
-                    std::io::ErrorKind::Other,
-                    e.to_string(),
-                ))
-            })?;
+pub async fn count() -> Result<i64, Box<dyn std::error::Error>> {
+    let db = pool::Manager::instance().await?;
+    let results = db.count("admin", None).await?;
     Ok(results)
 }
 
 pub async fn update_admin_password(
     id: u64,
     password: &str,
-) -> Result<bool, Box<dyn std::error::Error + Send + Sync>> {
-    let db = pool::Manager::instance().await.map_err(
-        |e| -> Box<dyn std::error::Error + Send + Sync> {
-            Box::new(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                e.to_string(),
-            ))
-        },
-    )?;
+) -> Result<bool, Box<dyn std::error::Error>> {
+    let db = pool::Manager::instance().await?;
     let table_name = db.get_table_name("admin");
 
+    let hash_pw = utils::common::password_hash(password);
+
+    println!("{:?}", hash_pw);
     let update = db
         .update_builder(&table_name)
         .set_str("password", password)
         .where_id(id);
-
-    let affected = db.update_with_builder(update).await.map_err(
-        |e| -> Box<dyn std::error::Error + Send + Sync> {
-            Box::new(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                e.to_string(),
-            ))
-        },
-    )?;
-
+    let affected = db.update_with_builder(update).await?;
     Ok(affected > 0)
 }
 
