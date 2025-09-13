@@ -24,14 +24,14 @@ impl Admin for FcAdmin {
         AuthMiddleware::verify_admin_request(&request).await?;
 
         let inner_request = request.get_ref();
-        println!("request.username: {:?}", inner_request.username);
-        println!("request.password: {:?}", inner_request.password);
+        // println!("request.username: {:?}", inner_request.username);
+        // println!("request.password: {:?}", inner_request.password);
 
         let adminids = orm::admin::find_admin_id_with_username(&inner_request.username)
             .await
             .map_err(|e| Status::internal(e.to_string()))?;
 
-        println!("{:?}", adminids);
+        // println!("{:?}", adminids);
 
         let mut resp = CreateOrUpdateAdminResponse { id: 0 };
         if adminids.len() > 0 {
@@ -50,7 +50,7 @@ impl Admin for FcAdmin {
                 true,
                 true,
                 true,
-                "cn",
+                "zh",
                 true,
             )
             .await
@@ -58,6 +58,7 @@ impl Admin for FcAdmin {
             resp.id = admin_id as i64;
         }
 
+        // println!("resp:{:?}", resp);
         Ok(Response::new(resp))
     }
 

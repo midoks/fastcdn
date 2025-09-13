@@ -11,30 +11,25 @@ pub async fn update_admin_password(
     password: &str,
 ) -> Result<bool, Box<dyn std::error::Error>> {
     let db = pool::Manager::instance().await?;
-    let table_name = db.get_table_name("admin");
 
-    let hash_pw = utils::common::password_hash(password);
+    let salt = utils::rand::string(5);
+    let password_salt = format!("{}.{}", password, salt);
+    let hash_pw = utils::common::password_hash(&password_salt)?;
 
-    println!("{:?}", hash_pw);
     let update = db
-        .update_builder(&table_name)
-        .set_str("password", password)
+        .update_builder("admin")
+        .set_str("password", &hash_pw)
+        .set_str("salt", &salt)
         .where_id(id);
     let affected = db.update_with_builder(update).await?;
+
     Ok(affected > 0)
 }
 
 pub async fn find_admin_id_with_username(
     username: &str,
-) -> Result<Vec<serde_json::Value>, Box<dyn std::error::Error + Send + Sync>> {
-    let db = pool::Manager::instance().await.map_err(
-        |e| -> Box<dyn std::error::Error + Send + Sync> {
-            Box::new(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                e.to_string(),
-            ))
-        },
-    )?;
+) -> Result<Vec<serde_json::Value>, Box<dyn std::error::Error>> {
+    let db = pool::Manager::instance().await?;
 
     let table_name = db.get_table_name("admin");
     let query = db
@@ -42,14 +37,7 @@ pub async fn find_admin_id_with_username(
         .select(&["id"])
         .limit(1)
         .where_eq("username", username);
-    let results = db.query_with_builder(query).await.map_err(
-        |e| -> Box<dyn std::error::Error + Send + Sync> {
-            Box::new(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                e.to_string(),
-            ))
-        },
-    )?;
+    let results = db.query_with_builder(query).await?;
     Ok(results)
 }
 
@@ -63,25 +51,21 @@ pub async fn add(
     theme: bool,
     lang: &str,
     state: bool,
-) -> Result<u64, Box<dyn std::error::Error + Send + Sync>> {
-    let db = pool::Manager::instance().await.map_err(
-        |e| -> Box<dyn std::error::Error + Send + Sync> {
-            Box::new(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                e.to_string(),
-            ))
-        },
-    )?;
+) -> Result<u64, Box<dyn std::error::Error>> {
+    let db = pool::Manager::instance().await?;
+
+    let salt = utils::rand::string(5);
+    let password_salt = format!("{}.{}", password, salt);
+    let hash_pw = utils::common::password_hash(&password_salt)?;
+
     let time_unix = utils::time::now_unix();
     let mut data = std::collections::HashMap::new();
     data.insert(
         "username".to_string(),
         serde_json::Value::String(username.to_string()),
     );
-    data.insert(
-        "password".to_string(),
-        serde_json::Value::String(password.to_string()),
-    );
+    data.insert("password".to_string(), serde_json::Value::String(hash_pw));
+    data.insert("salt".to_string(), serde_json::Value::String(salt));
     data.insert(
         "fullname".to_string(),
         serde_json::Value::String(fullname.to_string()),
@@ -107,13 +91,6 @@ pub async fn add(
         serde_json::Value::String(time_unix),
     );
 
-    let id = db.insert("admin", &data).await.map_err(
-        |e| -> Box<dyn std::error::Error + Send + Sync> {
-            Box::new(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                e.to_string(),
-            ))
-        },
-    )?;
+    let id = db.insert("admin", &data).await?;
     Ok(id)
 }
