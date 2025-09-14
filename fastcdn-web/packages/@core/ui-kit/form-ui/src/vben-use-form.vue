@@ -116,6 +116,8 @@ onMounted(async () => {
         :form="form"
         :global-common-config="DEFAULT_FORM_COMMON_CONFIG"
     >
+        
+        <!--
         <template
             v-for="slotName in delegatedSlots"
             :key="slotName"
@@ -123,6 +125,8 @@ onMounted(async () => {
         >
             <slot :name="slotName" v-bind="slotProps"></slot>
         </template>
+        -->
+
         <template #default="slotProps">
             <slot v-bind="slotProps">
                 <FormActions

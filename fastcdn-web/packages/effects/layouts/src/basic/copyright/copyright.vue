@@ -12,8 +12,8 @@ defineOptions({
 });
 
 withDefaults(defineProps<Props>(), {
-    companyName: 'Vben Admin',
-    companySiteLink: '',
+    companyName: 'FastCDN',
+    companySiteLink: 'https://github.com/midoks/fastcdn',
     date: '2024',
     icp: '',
     icpLink: '',

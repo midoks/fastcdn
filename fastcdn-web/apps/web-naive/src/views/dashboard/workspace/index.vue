@@ -208,9 +208,9 @@ const trendItems: WorkbenchTrendItem[] = [
     },
     {
         avatar: 'svg:avatar-4',
-        content: `发表文章 <a>如何编写使用 Admin Vben</a> `,
+        content: `发表文章 <a>如何编写使用 FastCDN</a> `,
         date: '2021-03-01 20:00',
-        title: 'Vben',
+        title: 'FastCDN',
     },
 ];
 
