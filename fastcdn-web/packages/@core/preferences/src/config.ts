@@ -39,8 +39,8 @@ const defaultPreferences: Preferences = {
         styleType: 'normal',
     },
     copyright: {
-        companyName: 'Vben',
-        companySiteLink: 'https://www.vben.pro',
+        companyName: 'FastCDN',
+        companySiteLink: 'https://github.com/midoks/fastcdn',
         date: '2024',
         enable: true,
         icp: '',
