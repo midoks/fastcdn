@@ -19,7 +19,7 @@ action:
   before:
   - echo "before"
   after:
-  # - ./build_web.sh
+  - ./build_web.sh
   - ./build_dist.sh
   # - ./target/release/fastcdn-api setup --protocol=http --host=127.0.0.1 --port 10001
   # - cd ./dist/fastcdn/fastcdn-api && ./bin/fastcdn-api setup --protocol=http --host=127.0.0.1 --port 10001
