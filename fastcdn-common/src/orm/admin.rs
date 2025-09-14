@@ -32,9 +32,6 @@ pub async fn find_admin_id_with_username(
     username: &str,
 ) -> Result<Vec<serde_json::Value>, Box<dyn std::error::Error>> {
     let db = pool::Manager::instance().await?;
-
-    let time_unix = utils::time::now_unix();
-
     let table_name = db.get_table_name("admin");
     let query = db
         .query_builder(&table_name)

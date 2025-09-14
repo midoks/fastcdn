@@ -24,7 +24,7 @@ defineOptions({
     name: 'AuthenticationLogin',
 });
 
-console.log(useVbenForm);
+//console.log(useVbenForm);
 
 const props = withDefaults(defineProps<Props>(), {
     codeLoginPath: '/auth/code-login',
