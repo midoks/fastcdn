@@ -12,6 +12,14 @@ defineOptions({ name: 'Login' });
 
 const authStore = useAuthStore();
 
+//{
+//    component: markRaw(SliderCaptcha),
+//    fieldName: 'captcha',
+//    rules: z.boolean().refine((value) => value, {
+//        message: $t('authentication.verifyRequiredTip'),
+//    }),
+//},
+
 const formSchema = computed((): VbenFormSchema[] => {
     return [
         {
@@ -35,13 +43,6 @@ const formSchema = computed((): VbenFormSchema[] => {
             rules: z
                 .string()
                 .min(1, { message: $t('authentication.passwordTip') }),
-        },
-        {
-            component: markRaw(SliderCaptcha),
-            fieldName: 'captcha',
-            rules: z.boolean().refine((value) => value, {
-                message: $t('authentication.verifyRequiredTip'),
-            }),
         },
     ];
 });
