@@ -82,6 +82,10 @@ function handleGo(path: string) {
     router.push(path);
 }
 
+function handleForgetPassword() {
+    window.open('https://github.com/midoks/fastcdn', '_blank');
+}
+
 onMounted(() => {
     if (localUsername) {
         formApi.setFieldValue('username', localUsername);
@@ -121,7 +125,7 @@ defineExpose({
             <span
                 v-if="showForgetPassword"
                 class="vben-link text-sm font-normal"
-                @click="handleGo(forgetPasswordPath)"
+                @click="handleForgetPassword"
             >
                 {{ $t('authentication.forgetPassword') }}
             </span>
