@@ -26,3 +26,5 @@ fastcdn-common = { path = "../fastcdn-common" }
 serde_yaml = "0.9.34"
 lazy_static = "1.4"
 sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "mysql", "chrono"] }
+chrono = { version = "0.4", features = ["serde"] }
+jsonwebtoken = "9.3"

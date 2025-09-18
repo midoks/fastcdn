@@ -22,25 +22,19 @@ impl Admin for FcAdmin {
         // 验证请求头认证
         AuthMiddleware::verify_admin_request(&request).await?;
 
-        let login_req = request.into_inner();
-        println!("admin login username: {:?}", login_req.username);
-        println!("admin login password: {:?}", login_req.password);
+        let req = request.into_inner();
+        println!("admin login username: {:?}", req.username);
+        println!("admin login password: {:?}", req.password);
 
         let reply = AdminLoginResponse {
-            id: -1,       // 用户ID
-            is_ok: false, // 登录是否成功
-            message: "登陆失败".to_string(),
+            id: 0,
+            status: false,
+            message: "请输入正确的用户名密码".to_string(),
         };
 
-        match pool::Manager::instance().await {
-            Ok(db) => {
-                println!("db: {:?}", db);
-                println!("addr: {:p}", &db);
-            }
-            Err(e) => {
-                println!("db manager fail: {:?}", e);
-            }
-        }
+        let id = orm::admin::check_admin_password(&req.username, &req.password).await;
+
+        println!("{:?}", id);
 
         Ok(Response::new(reply))
     }
@@ -52,25 +46,25 @@ impl Admin for FcAdmin {
     ) -> Result<Response<CreateOrUpdateAdminResponse>, Status> {
         AuthMiddleware::verify_admin_request(&request).await?;
 
-        let inner_request = request.get_ref();
+        let req = request.get_ref();
 
-        let adminids = orm::admin::find_admin_id_with_username(&inner_request.username)
+        let adminids = orm::admin::find_admin_id_with_username(&req.username)
             .await
             .map_err(|e| Status::internal(e.to_string()))?;
 
         let mut resp = CreateOrUpdateAdminResponse { id: 0 };
         if adminids.len() > 0 {
             let admin_id = adminids[0]["id"].as_u64().unwrap_or(0);
-            orm::admin::update_admin_password(admin_id, &inner_request.password)
+            orm::admin::update_admin_password(admin_id, &req.password)
                 .await
                 .map_err(|e| Status::internal(e.to_string()))?;
 
             resp.id = admin_id as i64;
         } else {
             let admin_id = orm::admin::add(
-                &inner_request.username,
-                &inner_request.password,
-                &inner_request.username,
+                &req.username,
+                &req.password,
+                &req.username,
                 true,
                 true,
                 true,

@@ -13,7 +13,7 @@ defineOptions({
 
 withDefaults(defineProps<Props>(), {
     companyName: 'FastCDN',
-    companySiteLink: 'https://github.com/midoks/fastcdn',
+    companySiteLink: '',
     date: '2024',
     icp: '',
     icpLink: '',

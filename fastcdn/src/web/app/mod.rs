@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 pub mod api;
+pub mod auth;
 pub mod setup;
 
 // 必须为所有需要序列化/反序列化的结构体添加derive

@@ -32,12 +32,15 @@ impl HttpServerManager {
                                 .route(web::get().to(StaticHandler::handle_static)),
                         )
                         .service(
-                            web::scope("/api").service(app::api::hello).service(
-                                web::scope("/setup")
-                                    .service(app::setup::test::db_test_post)
-                                    .service(app::setup::install::install_post)
-                                    .service(app::setup::install::install_get),
-                            ),
+                            web::scope("/api")
+                                .service(app::api::hello)
+                                .service(
+                                    web::scope("/setup")
+                                        .service(app::setup::test::db_test_post)
+                                        .service(app::setup::install::install_post)
+                                        .service(app::setup::install::install_get),
+                                )
+                                .service(web::scope("/auth").service(app::auth::login::post)),
                         )
                         .service(
                             web::scope("/setup")

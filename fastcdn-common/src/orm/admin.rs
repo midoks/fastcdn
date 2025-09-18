@@ -6,6 +6,28 @@ pub async fn count() -> Result<i64, Box<dyn std::error::Error>> {
     Ok(results)
 }
 
+pub async fn check_admin_password(
+    username: &str,
+    password: &str,
+) -> Result<u64, Box<dyn std::error::Error>> {
+    let db = pool::Manager::instance().await?;
+    let table_name = db.get_table_name("admin");
+    let query = db
+        .query_builder(&table_name)
+        .select(&["id"])
+        .limit(1)
+        .where_eq("username", username);
+    let mut results = db.query_with_builder(query).await?;
+
+    if results.len() > 0 {
+        let id = results[0].get_mut("id");
+        println!("id:{:?}", id);
+    }
+
+    println!("{:?}", results);
+    Ok(0u64)
+}
+
 pub async fn update_admin_password(
     id: u64,
     password: &str,
