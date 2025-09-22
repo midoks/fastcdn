@@ -14,17 +14,33 @@ pub async fn check_admin_password(
     let table_name = db.get_table_name("admin");
     let query = db
         .query_builder(&table_name)
-        .select(&["id"])
+        .select(&["id", "password", "salt"])
         .limit(1)
         .where_eq("username", username);
-    let mut results = db.query_with_builder(query).await?;
-
+    let results = db.query_with_builder(query).await?;
     if results.len() > 0 {
-        let id = results[0].get_mut("id");
-        println!("id:{:?}", id);
-    }
+        // 先克隆一份结果，避免多次可变借用
+        let result = &results[0];
 
-    println!("{:?}", results);
+        let salt_opt = result.get("salt");
+        let password_opt = result.get("password");
+        let id_value_opt = result.get("id");
+
+        if let (Some(salt), Some(passdb), Some(id)) = (salt_opt, password_opt, id_value_opt) {
+            if let (Some(salt_str), Some(password_str)) = (salt.as_str(), passdb.as_str()) {
+                // 计算密码的MD5值
+                let password_md5 = utils::common::md5_string(password);
+
+                let password_salt = format!("{}.{}", password_md5, salt_str);
+                let hash_pw = utils::common::md5_string(&password_salt);
+                if hash_pw == password_str {
+                    if let Some(id_u64) = id.as_u64() {
+                        return Ok(id_u64);
+                    }
+                }
+            }
+        }
+    }
     Ok(0u64)
 }
 
@@ -36,8 +52,9 @@ pub async fn update_admin_password(
 
     let time_unix = utils::time::now_unix();
     let salt = utils::rand::string(5);
-    let password_salt = format!("{}.{}", password, salt);
-    let hash_pw = utils::common::password_hash(&password_salt)?;
+    let password_md5 = utils::common::md5_string(&password);
+    let password_salt = format!("{}.{}", password_md5, salt);
+    let hash_pw = utils::common::md5_string(&password_salt);
 
     let update = db
         .update_builder("admin")
@@ -78,8 +95,10 @@ pub async fn add(
     let db = pool::Manager::instance().await?;
 
     let salt = utils::rand::string(5);
-    let password_salt = format!("{}.{}", password, salt);
-    let hash_pw = utils::common::password_hash(&password_salt)?;
+
+    let password_md5 = utils::common::md5_string(&password);
+    let password_salt = format!("{}.{}", password_md5, salt);
+    let hash_pw = utils::common::md5_string(&password_salt);
 
     let time_unix = utils::time::now_unix();
     let mut data = std::collections::HashMap::new();

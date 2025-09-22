@@ -92,8 +92,7 @@ impl AuthMiddleware {
         let header: MetaDataHeader = serde_json::from_str(&header_jstr)
             .map_err(|e| Status::invalid_argument(format!("header json parse failed: {}", e)))?;
 
-        println!("header:{:?}", header);
-
+        // println!("header:{:?}", header);
         // 验证 token 类型
         if header.r#type != "admin" {
             return Err(Status::unauthenticated("invalid admin token type"));

@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 const SECRET: &str = "fastcdn-secret-001";
 
 #[derive(Debug, Serialize, Deserialize)]
-struct Claims {
+pub struct Claims {
     sub: String, // Subject (user identifier)
     exp: usize,  // Expiration time (as UTC timestamp)
     iat: usize,  // Issued at (as UTC timestamp)

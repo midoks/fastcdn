@@ -30,6 +30,9 @@ impl Admin for FcAdmin {
         };
 
         let result = orm::admin::check_admin_password(&req.username, &req.password).await;
+
+        println!("req:{:?}", req);
+        println!("result:{:?}", result);
         if let Ok(id) = result {
             if id > 0 {
                 reply.id = id as i64;
