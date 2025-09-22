@@ -24,15 +24,15 @@ pub async fn check_admin_password(
 
         let salt_opt = result.get("salt");
         let password_opt = result.get("password");
-        let id_value_opt = result.get("id");
+        let id_opt = result.get("id");
 
-        if let (Some(salt), Some(passdb), Some(id)) = (salt_opt, password_opt, id_value_opt) {
+        if let (Some(salt), Some(passdb), Some(id)) = (salt_opt, password_opt, id_opt) {
             if let (Some(salt_str), Some(password_str)) = (salt.as_str(), passdb.as_str()) {
                 // 计算密码的MD5值
                 let password_md5 = utils::common::md5_string(password);
-
                 let password_salt = format!("{}.{}", password_md5, salt_str);
                 let hash_pw = utils::common::md5_string(&password_salt);
+
                 if hash_pw == password_str {
                     if let Some(id_u64) = id.as_u64() {
                         return Ok(id_u64);
