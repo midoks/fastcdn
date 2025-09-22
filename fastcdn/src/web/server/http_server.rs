@@ -37,10 +37,9 @@ impl HttpServerManager {
                                 .service(
                                     web::scope("/setup")
                                         .service(app::setup::test::db_test_post)
-                                        .service(app::setup::install::install_post)
-                                        .service(app::setup::install::install_get),
+                                        .service(app::setup::install::install_post),
                                 )
-                                .service(web::scope("/auth").service(app::auth::login::post)),
+                                .service(web::scope("/auth").service(app::auth::login::login_post)),
                         )
                         .service(
                             web::scope("/setup")

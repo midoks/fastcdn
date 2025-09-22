@@ -8,6 +8,7 @@ use std::sync::Arc;
 pub struct LoginResponse {
     pub message: String,
     pub status: i16,
+    pub data: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)] // 接收JSON请求的结构体
@@ -17,10 +18,10 @@ pub struct LoginRequest {
 }
 
 #[post("/login")]
-pub async fn post(
+pub async fn login_post(
     req: web::Json<LoginRequest>,
 ) -> Result<impl Responder, Box<dyn std::error::Error>> {
-    println!("{:?}", req);
+    // println!("{:?}", req);
 
     let mut admin_rpc = fastcdn_common::rpc::client::CommonRpc::admin_rpc().await?;
 
@@ -35,12 +36,19 @@ pub async fn post(
         .await?;
 
     println!("resp:{:?}", resp);
+    if resp.id != 0 {
+        return Ok(web::Json(LoginResponse {
+            message: "登陆失败".to_string(),
+            status: -1,
+            data: "".to_string(),
+        }));
+    }
 
-    let token = fastcdn::utils::jwt::create("1");
-
-    println!("token:{:?}", token);
+    let token = fastcdn::utils::jwt::create(&resp.id.to_string());
+    // println!("token:{:?}", token);
     Ok(web::Json(LoginResponse {
         message: "ok".to_string(),
         status: 0,
+        data: token?,
     }))
 }

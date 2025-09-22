@@ -23,19 +23,20 @@ impl Admin for FcAdmin {
         AuthMiddleware::verify_admin_request(&request).await?;
 
         let req = request.into_inner();
-        println!("admin login username: {:?}", req.username);
-        println!("admin login password: {:?}", req.password);
-
-        let reply = AdminLoginResponse {
-            id: 0,
+        let mut reply = AdminLoginResponse {
+            id: -1,
             status: false,
-            message: "请输入正确的用户名密码".to_string(),
+            message: "please enter the correct username and password!".to_string(),
         };
 
-        let id = orm::admin::check_admin_password(&req.username, &req.password).await;
-
-        println!("{:?}", id);
-
+        let result = orm::admin::check_admin_password(&req.username, &req.password).await;
+        if let Ok(id) = result {
+            if id > 0 {
+                reply.id = id as i64;
+                reply.status = true;
+                reply.message = "ok".to_string();
+            }
+        }
         Ok(Response::new(reply))
     }
 
@@ -88,9 +89,7 @@ impl Admin for FcAdmin {
         // 验证请求头认证
         AuthMiddleware::verify_request(&request)?;
 
-        let reply = AdminCreateResponse {
-            id: 1, // 示例ID，实际应该从数据库生成
-        };
+        let reply = AdminCreateResponse { id: 1 };
 
         match pool::Manager::instance().await {
             Ok(manager) => println!("数据库管理器实例: {:?}", manager),

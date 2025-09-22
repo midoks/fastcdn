@@ -1,7 +1,8 @@
 use chrono::Utc;
 use jsonwebtoken::{DecodingKey, EncodingKey, Header, Validation, decode, encode};
 use serde::{Deserialize, Serialize};
-const SECRET: &str = "fastcdn-secret";
+
+const SECRET: &str = "fastcdn-secret-001";
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Claims {
