@@ -43,27 +43,20 @@ impl HttpServerManager {
                                 .wrap(JwtMiddleware)
                                 .service(app::api::hello)
                                 .service(
-                                    web::scope("/setup")
-                                        .service(app::setup::test::db_test_post)
-                                        .service(app::setup::install::install_post),
+                                    web::scope("/user").route(
+                                        "/info",
+                                        web::get().to(app::auth::user_info::user_info),
+                                    ),
                                 )
+                                // .route("/codes", web::get().to(app::auth::codes::codes))
                                 .service(
-                                    web::scope("/user")
-                                        .route(
-                                            "/info",
-                                            web::get().to(app::auth::user_info::user_info),
-                                        )
-                                        .route("/codes", web::get().to(app::auth::codes::codes)),
-                                )
-                                .service(
-                                    web::scope("/auth")
+                                    web::scope("/auths")
                                         .route("/codes", web::get().to(app::auth::codes::codes)),
                                 ),
                         )
                         .service(
-                            // 需要JWT验证的设置路由
+                            // 安装不需要JWT验证的设置路由
                             web::scope("/setup")
-                                .wrap(JwtMiddleware)
                                 .service(app::setup::test::db_test_post)
                                 .service(app::setup::test::db_test_get),
                         )
