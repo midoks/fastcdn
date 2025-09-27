@@ -2,6 +2,7 @@
 //!
 //! 包含HTTP服务器和相关组件
 pub mod app;
+pub mod middleware;
 pub mod server;
 pub mod test;
 

@@ -4,13 +4,13 @@ use std::sync::Arc;
 
 // 必须为所有需要序列化/反序列化的结构体添加derive
 #[derive(Debug, Serialize, Deserialize)] // 添加Debug方便日志记录
-pub struct LoginResponseData {
+pub struct InfoResponseData {
     pub token: String,
 }
 
 // 必须为所有需要序列化/反序列化的结构体添加derive
 #[derive(Debug, Serialize, Deserialize)] // 添加Debug方便日志记录
-pub struct LoginResponse {
+pub struct InfoResponse {
     pub message: String,
     pub code: i16,
     pub token: Option<String>,
@@ -18,14 +18,14 @@ pub struct LoginResponse {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)] // 接收JSON请求的结构体
-pub struct LoginRequest {
+pub struct InfoRequest {
     pub username: String,
     pub password: String,
 }
 
-#[post("/login")]
-pub async fn login(
-    req: web::Json<LoginRequest>,
+#[post("/info")]
+pub async fn info(
+    req: web::Json<InfoRequest>,
 ) -> Result<impl Responder, Box<dyn std::error::Error>> {
     // println!("{:?}", req);
     let mut admin_rpc = fastcdn_common::rpc::client::CommonRpc::admin_rpc().await?;
@@ -42,7 +42,7 @@ pub async fn login(
 
     println!("resp:{:?}", resp);
     if resp.id == 0 {
-        return Ok(web::Json(LoginResponse {
+        return Ok(web::Json(InfoResponse {
             message: "登陆失败".to_string(),
             code: -1,
             token: None,
@@ -52,7 +52,7 @@ pub async fn login(
     let token = fastcdn::utils::jwt::create(&resp.id.to_string())?;
     // println!("token:{:?}", token);
 
-    let resp_data = LoginResponse {
+    let resp_data = InfoResponse {
         message: "ok".to_string(),
         code: 0,
         token: Some(token),

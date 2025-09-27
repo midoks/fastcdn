@@ -6,9 +6,9 @@ const SECRET: &str = "fastcdn-secret-001";
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {
-    sub: String, // Subject (user identifier)
-    exp: usize,  // Expiration time (as UTC timestamp)
-    iat: usize,  // Issued at (as UTC timestamp)
+    pub sub: String, // Subject (user identifier)
+    pub exp: usize,  // Expiration time (as UTC timestamp)
+    pub iat: usize,  // Issued at (as UTC timestamp)
 }
 
 pub fn create(id: &str) -> Result<String, jsonwebtoken::errors::Error> {

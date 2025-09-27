@@ -1,5 +1,6 @@
 use super::static_handler::StaticHandler;
 use crate::web::app;
+use crate::web::middleware::JwtMiddleware;
 use actix_cors::Cors;
 use actix_web::{App, HttpServer, web};
 
@@ -27,22 +28,34 @@ impl HttpServerManager {
 
                     App::new()
                         .wrap(cors)
+                        // 静态资源和公共路由不需要JWT验证
                         .service(
                             web::resource("/static/{_:.*}")
                                 .route(web::get().to(StaticHandler::handle_static)),
                         )
                         .service(
+                            // 登录接口不需要JWT验证
+                            web::scope("/api/auth").service(app::auth::login::login),
+                        )
+                        .service(
+                            // 需要JWT验证的API路由
                             web::scope("/api")
+                                .wrap(JwtMiddleware)
                                 .service(app::api::hello)
                                 .service(
                                     web::scope("/setup")
                                         .service(app::setup::test::db_test_post)
                                         .service(app::setup::install::install_post),
                                 )
-                                .service(web::scope("/auth").service(app::auth::login::login_post)),
+                                .service(web::scope("/user").route(
+                                    "/info",
+                                    web::get().to(app::auth::user_info::user_info),
+                                )),
                         )
                         .service(
+                            // 需要JWT验证的设置路由
                             web::scope("/setup")
+                                .wrap(JwtMiddleware)
                                 .service(app::setup::test::db_test_post)
                                 .service(app::setup::test::db_test_get),
                         )
