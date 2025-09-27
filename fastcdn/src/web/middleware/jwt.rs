@@ -1,10 +1,10 @@
 use actix_web::{
-    dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform},
+    Error, HttpMessage,
+    dev::{Service, ServiceRequest, ServiceResponse, Transform, forward_ready},
     error::ErrorUnauthorized,
     http::header,
-    Error, HttpMessage,
 };
-use futures::future::{ready, LocalBoxFuture, Ready};
+use futures::future::{LocalBoxFuture, Ready, ready};
 use std::rc::Rc;
 
 // 用户ID的扩展类型
@@ -58,16 +58,17 @@ where
                 let auth_str = auth_header.to_str().unwrap_or_default();
                 if auth_str.starts_with("Bearer ") {
                     let token = auth_str.trim_start_matches("Bearer ").trim();
-                    
+
+                    println!("token:{:?}", token);
                     // 验证token
                     match fastcdn::utils::jwt::validate(token) {
                         Ok(claims) => {
                             // 从token中提取用户ID
                             let user_id = claims.sub.parse::<i64>().unwrap_or(0);
-                            
+
                             // 将用户ID添加到请求扩展中，以便后续处理程序使用
                             req.extensions_mut().insert(UserId(user_id));
-                            
+
                             // 继续处理请求
                             let res = service.call(req).await?;
                             Ok(res)

@@ -47,10 +47,18 @@ impl HttpServerManager {
                                         .service(app::setup::test::db_test_post)
                                         .service(app::setup::install::install_post),
                                 )
-                                .service(web::scope("/user").route(
-                                    "/info",
-                                    web::get().to(app::auth::user_info::user_info),
-                                )),
+                                .service(
+                                    web::scope("/user")
+                                        .route(
+                                            "/info",
+                                            web::get().to(app::auth::user_info::user_info),
+                                        )
+                                        .route("/codes", web::get().to(app::auth::codes::codes)),
+                                )
+                                .service(
+                                    web::scope("/auth")
+                                        .route("/codes", web::get().to(app::auth::codes::codes)),
+                                ),
                         )
                         .service(
                             // 需要JWT验证的设置路由
