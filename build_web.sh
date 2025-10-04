@@ -1,10 +1,12 @@
 #!/bin/bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin:/usr/local/lib/python2.7/bin:/opt/homebrew/bin
 curPath=`pwd`
+rootPath=$(dirname "$curPath")
 echo "web pnpm build start"
 
 # exit 0
 echo $curPath
+echo $rootPath
 
 # if [ -f $curPath/fastcdn-web/apps/web-naive/dist.zip ] && [ -f $curPath/fastcdn/public/dist.zip ];
 # then
@@ -20,7 +22,7 @@ echo $curPath
 # 	fi
 # fi
 
-cd fastcdn-web && pnpm build
+cd ${rootPath}/fastcdn-web && pnpm build
 rm -rf ${curPath}/fastcdn/public/dist.zip
 cp -rf ${curPath}/fastcdn-web/apps/web-naive/dist.zip ${curPath}/fastcdn/public/dist.zip
 
@@ -28,8 +30,8 @@ cd ${curPath}/fastcdn/public
 unzip -o dist.zip -d ./ 
 echo "web cover end"
 
-echo "rm -rf ${curPath}/fastcdn-web/apps/web-naive/dist.zip"
-rm -rf ${curPath}/fastcdn-web/apps/web-naive/dist.zip
+echo "rm -rf ${rootPath}/fastcdn-web/apps/web-naive/dist.zip"
+rm -rf ${rootPath}/fastcdn-web/apps/web-naive/dist.zip
 rm -rf ${curPath}/fastcdn/public/dist.zip
 
 echo "web pnpm build end"
