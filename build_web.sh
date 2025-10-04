@@ -24,7 +24,7 @@ echo $rootPath
 
 cd ${rootPath}/fastcdn-web && pnpm build
 rm -rf ${curPath}/fastcdn/public/dist.zip
-cp -rf ${curPath}/fastcdn-web/apps/web-naive/dist.zip ${curPath}/fastcdn/public/dist.zip
+cp -rf ${rootPath}/fastcdn-web/apps/web-naive/dist.zip ${curPath}/fastcdn/public/dist.zip
 
 cd ${curPath}/fastcdn/public
 unzip -o dist.zip -d ./ 
