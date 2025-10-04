@@ -3,13 +3,13 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 // 必须为所有需要序列化/反序列化的结构体添加derive
-#[derive(Debug, Serialize, Deserialize)] // 添加Debug方便日志记录
+#[derive(Debug, Serialize, Deserialize, utoipa::ToSchema)] // 添加Debug方便日志记录
 pub struct LoginResponseData {
     pub token: String,
 }
 
 // 必须为所有需要序列化/反序列化的结构体添加derive
-#[derive(Debug, Serialize, Deserialize)] // 添加Debug方便日志记录
+#[derive(Debug, Serialize, Deserialize, utoipa::ToSchema)] // 添加Debug方便日志记录
 pub struct LoginResponse {
     pub message: String,
     pub code: i16,
@@ -17,12 +17,21 @@ pub struct LoginResponse {
     // pub data: Option<LoginResponseData>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)] // 接收JSON请求的结构体
+#[derive(Debug, Serialize, Deserialize, Clone, utoipa::ToSchema)] // 接收JSON请求的结构体
 pub struct LoginRequest {
     pub username: String,
     pub password: String,
 }
 
+#[utoipa::path(
+    post,
+    path = "/api/auth/login",
+    request_body = LoginRequest,
+    responses(
+        (status = 200, description = "Login result", body = LoginResponse)
+    ),
+    tag = "auth"
+)]
 #[post("/login")]
 pub async fn login(
     req: web::Json<LoginRequest>,

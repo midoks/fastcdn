@@ -3,6 +3,8 @@ use crate::web::app;
 use crate::web::middleware::JwtMiddleware;
 use actix_cors::Cors;
 use actix_web::{App, HttpServer, web};
+use utoipa::OpenApi;
+use utoipa_swagger_ui::SwaggerUi;
 
 /// HTTP服务器配置和启动
 pub struct HttpServerManager;
@@ -28,6 +30,10 @@ impl HttpServerManager {
 
                     App::new()
                         .wrap(cors)
+                        .service(
+                            SwaggerUi::new("/swagger-ui/{_:.*}")
+                                .url("/api-docs/openapi.json", crate::web::app::ApiDoc::openapi()),
+                        )
                         // 静态资源和公共路由不需要JWT验证
                         .service(
                             web::resource("/static/{_:.*}")
@@ -50,7 +56,7 @@ impl HttpServerManager {
                                 )
                                 // .route("/codes", web::get().to(app::auth::codes::codes))
                                 .service(
-                                    web::scope("/auths")
+                                    web::scope("/auth")
                                         .route("/codes", web::get().to(app::auth::codes::codes)),
                                 ),
                         )

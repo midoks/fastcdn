@@ -4,13 +4,13 @@ use std::process::Command;
 use std::sync::Arc;
 
 // 必须为所有需要序列化/反序列化的结构体添加derive
-#[derive(Debug, Serialize, Deserialize)] // 添加Debug方便日志记录
+#[derive(Debug, Serialize, Deserialize, utoipa::ToSchema)] // 添加Debug方便日志记录
 pub struct InstallResponse {
     pub message: String,
     pub status: i16,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)] // 接收JSON请求的结构体
+#[derive(Debug, Serialize, Deserialize, Clone, utoipa::ToSchema)] // 接收JSON请求的结构体
 pub struct InstallRequest {
     pub api_host: String,
     pub api_port: u32,
@@ -30,6 +30,15 @@ pub struct InstallRequest {
     pub admin_password: String,
 }
 
+#[utoipa::path(
+    post,
+    path = "/setup/install",
+    request_body = InstallRequest,
+    responses(
+        (status = 200, description = "Install result", body = InstallResponse)
+    ),
+    tag = "setup"
+)]
 #[post("/install")]
 pub async fn install_post(
     req: web::Json<InstallRequest>,

@@ -60,7 +60,11 @@ impl Server {
         let mut instance_guard = INSTANCE.lock().unwrap();
 
         if instance_guard.is_none() {
-            let server = Self::load_default()?;
+            // 优先尝试从默认配置文件加载，失败时回退到内置默认配置
+            let server = match Self::load_default() {
+                Ok(s) => s,
+                Err(_e) => Self::new()?,
+            };
             server
                 .validate()
                 .map_err(|e| Box::new(std::io::Error::new(std::io::ErrorKind::InvalidData, e)))?;

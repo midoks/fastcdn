@@ -22,6 +22,9 @@ echo $rootPath
 # 	fi
 # fi
 
+rm -rf ${curPath}/fastcdn/public/index.html
+rm -rf ${curPath}/fastcdn/public/static
+
 cd ${rootPath}/fastcdn-web && pnpm build
 rm -rf ${curPath}/fastcdn/public/dist.zip
 cp -rf ${rootPath}/fastcdn-web/apps/web-naive/dist.zip ${curPath}/fastcdn/public/dist.zip
