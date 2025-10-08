@@ -1,5 +1,6 @@
 # environment code
 env: prod
+open_swagger_doc: true
 
 # http
 http:

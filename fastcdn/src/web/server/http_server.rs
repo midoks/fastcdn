@@ -21,19 +21,25 @@ impl HttpServerManager {
                 let http_listen = http_listen_raw.replace("\"", "");
                 println!("web start: {:?}", http_listen);
 
-                let service = HttpServer::new(|| {
+                let open_swagger = config.open_swagger_doc;
+
+                let service = HttpServer::new(move || {
                     let cors = Cors::default()
                         .allow_any_origin()
                         .allow_any_method()
                         .allow_any_header()
                         .max_age(3600);
 
-                    App::new()
-                        .wrap(cors)
-                        .service(
+                    let mut app = App::new().wrap(cors);
+
+                    if open_swagger {
+                        app = app.service(
                             SwaggerUi::new("/swagger-ui/{_:.*}")
                                 .url("/api-docs/openapi.json", crate::web::app::ApiDoc::openapi()),
-                        )
+                        );
+                    }
+
+                    app
                         // 静态资源和公共路由不需要JWT验证
                         .service(
                             web::resource("/static/{_:.*}")
@@ -54,7 +60,6 @@ impl HttpServerManager {
                                         web::get().to(app::auth::user_info::user_info),
                                     ),
                                 )
-                                // .route("/codes", web::get().to(app::auth::codes::codes))
                                 .service(
                                     web::scope("/auth")
                                         .route("/codes", web::get().to(app::auth::codes::codes)),

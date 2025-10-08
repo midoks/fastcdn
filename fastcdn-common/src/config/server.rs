@@ -29,6 +29,8 @@ pub struct Https {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Server {
     pub env: String,
+    #[serde(default)]
+    pub open_swagger_doc: bool,
     pub http: Http,
     pub https: Https,
 }
@@ -42,6 +44,7 @@ impl Server {
     pub fn new() -> Result<Self, Box<dyn std::error::Error>> {
         Ok(Server {
             env: "development".to_string(),
+            open_swagger_doc: false,
             http: Http {
                 on: true,
                 listen: vec!["0.0.0.0:8080".to_string()],
