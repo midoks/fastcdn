@@ -31,7 +31,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = AppName
 	app.Version = Version
-	app.Usage = "a mgo service"
+	app.Usage = "fastcdn service"
 	app.Commands = []cli.Command{
 		cmd.Web,
 		cmd.Root,

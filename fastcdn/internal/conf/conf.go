@@ -128,7 +128,7 @@ func InstallConf(data map[string]string) error {
 	appConfig.RunMode = "prod"
 
 	appConfig.Log.RootPath = Log.RootPath
-	admin_path := "mgo"
+	admin_path := "fast"
 	appConfig.Web.AdminPath = admin_path
 
 	if strings.EqualFold(data["type"], "mysql") {
