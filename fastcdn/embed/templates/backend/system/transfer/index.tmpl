@@ -1,0 +1,59 @@
+{[template "backend/common/header_nonav.tmpl" .]}
+
+<div class="layui-fluid">
+    <div class="layui-col-md12" style="padding: 5px;">
+        <div class="layui-card">
+            <div class="layui-card-body">
+
+                <div class="layui-tab layui-tab-brief">
+                    <ul class="layui-tab-title" id="status">
+                        {[range $menu := .submenu]}
+                            <li data-status="{[$menu.Number]}" {[if eq (print "/" $.admin_path "/" $menu.Link) $.CurrentPath]}class="layui-this"{[end]}><a href="/{[$.admin_path]}/{[$menu.Link]}">{[$menu.Name]}</a></li>
+                        {[end]}
+                    </ul>
+                </div>
+
+                <!-- 步骤指示器 -->
+                <div class="layui-row" style="margin: 25px;">
+                    <div class="steps">
+                        {[range $index, $step := .steps]}
+                            <div class="step {[if eq $index 0]}active{[end]}">
+                                <span class="num">{[if eq $index 0]}1{[end]}{[if eq $index 1]}2{[end]}{[if eq $index 2]}3{[end]}{[if eq $index 3]}4{[end]}{[if eq $index 4]}5{[end]}{[if eq $index 5]}6{[end]}{[if eq $index 6]}7{[end]}</span>
+                                <span class="label">{[$step.Name]}</span>
+                                {[if lt $index 6]}<span class="line"></span>{[end]}
+                            </div>
+                        {[end]}
+                    </div>
+                </div>
+
+                <!-- 内容区域 -->
+                <div class="layui-card" style="background: #fafafa;">
+                    <div class="layui-card-body" style="line-height: 2; color: #666;">
+                        <p>通过此引导程序可以帮助你将当前平台配置迁移到新的平台中。</p>
+                        <p>每个步骤请小心操作，一旦配置错误可能需要手工还原。</p>
+                        <p>每个步骤请小心操作，一旦配置错误可能需要手工还原。</p>
+                    </div>
+                </div>
+
+                <!-- 操作按钮 -->
+                <div class="layui-form-item" style="text-align: right; margin-top: 40px;">
+                    <button class="layui-btn" onclick="nextStep()">下一步</button>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+layui.config({base: '/static/layuiadmin/'}).use(['layer','jquery'], function(){
+    var layer = layui.layer;
+    var $ = layui.$;
+
+    window.nextStep = function() {
+        window.location.href = '/{[$.admin_path]}/system/transfer/step2';
+    };
+});
+</script>
+
+{[template "backend/common/footer.tmpl" .]}

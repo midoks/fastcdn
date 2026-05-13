@@ -1,3 +1,0 @@
-rpc.endpoints: [ "${rpc_endpoints}" ]
-nodeId: "${nodeId}"
-secret: "${secret}"
