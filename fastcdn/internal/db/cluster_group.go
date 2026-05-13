@@ -5,7 +5,7 @@ import (
 
 	"gorm.io/gorm"
 
-	"mgo/internal/model"
+	"fastcdn/internal/model"
 
 	"github.com/pkg/errors"
 )

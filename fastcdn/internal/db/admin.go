@@ -6,8 +6,8 @@ import (
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 
-	"mgo/internal/model"
-	utils "mgo/internal/utils"
+	"fastcdn/internal/model"
+	utils "fastcdn/internal/utils"
 )
 
 func GetAdminList(page, size int) ([]model.Admin, int64, error) {

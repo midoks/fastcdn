@@ -12,11 +12,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"mgo/internal/app/common"
-	"mgo/internal/app/form"
-	"mgo/internal/db"
-	"mgo/internal/model"
-	tools "mgo/internal/utils"
+	"fastcdn/internal/app/common"
+	"fastcdn/internal/app/form"
+	"fastcdn/internal/db"
+	"fastcdn/internal/model"
+	tools "fastcdn/internal/utils"
 )
 
 func parseClusterNodeIpArray(ipJson string) ([]form.ClusterNodeIpAddr, error) {

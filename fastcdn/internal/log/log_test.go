@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"mgo/internal/conf"
+	"fastcdn/internal/conf"
 )
 
 func TestInit(t *testing.T) {

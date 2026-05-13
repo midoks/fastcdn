@@ -5,7 +5,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"mgo/internal/model"
+	"fastcdn/internal/model"
 )
 
 func GetApiNodeList(page, size int) ([]model.ApiNode, int64, error) {

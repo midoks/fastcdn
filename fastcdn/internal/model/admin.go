@@ -5,8 +5,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"mgo/internal/errs"
-	utils "mgo/internal/utils"
+	"fastcdn/internal/errs"
+	utils "fastcdn/internal/utils"
 )
 
 type Admin struct {

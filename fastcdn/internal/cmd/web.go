@@ -3,10 +3,10 @@ package cmd
 import (
 	"github.com/urfave/cli"
 
-	"mgo/internal/app"
-	"mgo/internal/conf"
-	"mgo/internal/db"
-	"mgo/internal/log"
+	"fastcdn/internal/app"
+	"fastcdn/internal/conf"
+	"fastcdn/internal/db"
+	"fastcdn/internal/log"
 )
 
 var Web = cli.Command{

@@ -7,9 +7,9 @@ import (
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 
-	"mgo/internal/db"
-	"mgo/internal/model"
-	utils "mgo/internal/utils"
+	"fastcdn/internal/db"
+	"fastcdn/internal/model"
+	utils "fastcdn/internal/utils"
 )
 
 func InitAdmin(user string, pass string) error {

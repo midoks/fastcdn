@@ -4,7 +4,7 @@ import (
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 
-	"mgo/internal/model"
+	"fastcdn/internal/model"
 )
 
 func GetAdminRecipientsInstancesList(page, size int) ([]model.AdminMediaInstance, int64, error) {

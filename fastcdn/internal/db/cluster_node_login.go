@@ -1,7 +1,7 @@
 package db
 
 import (
-	"mgo/internal/model"
+	"fastcdn/internal/model"
 	"time"
 
 	"github.com/pkg/errors"

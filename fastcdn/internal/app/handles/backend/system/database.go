@@ -6,12 +6,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"mgo/internal/app/common"
-	"mgo/internal/app/form"
-	"mgo/internal/conf"
-	"mgo/internal/db"
-	"mgo/internal/model"
-	"mgo/internal/op"
+	"fastcdn/internal/app/common"
+	"fastcdn/internal/app/form"
+	"fastcdn/internal/conf"
+	"fastcdn/internal/db"
+	"fastcdn/internal/model"
+	"fastcdn/internal/op"
 )
 
 func GetSysAdvancedSubMenu() []form.ClusterSubMenu {

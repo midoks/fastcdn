@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"mgo/internal/conf"
-	"mgo/internal/db"
+	"fastcdn/internal/conf"
+	"fastcdn/internal/db"
 )
 
 var (

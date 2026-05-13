@@ -9,9 +9,9 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 
-	"mgo/internal/app/common"
-	"mgo/internal/conf"
-	"mgo/internal/db"
+	"fastcdn/internal/app/common"
+	"fastcdn/internal/conf"
+	"fastcdn/internal/db"
 )
 
 func AuthRequired() gin.HandlerFunc {

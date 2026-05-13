@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/urfave/cli"
 
-	"mgo/internal/conf"
-	"mgo/internal/db"
-	"mgo/internal/log"
+	"fastcdn/internal/conf"
+	"fastcdn/internal/db"
+	"fastcdn/internal/log"
 )
 
 var Root = cli.Command{

@@ -5,7 +5,7 @@ import (
 
 	"gorm.io/gorm"
 
-	"mgo/internal/conf"
+	"fastcdn/internal/conf"
 )
 
 func columnName(name string) string {

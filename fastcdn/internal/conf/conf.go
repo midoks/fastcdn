@@ -9,7 +9,7 @@ import (
 	"github.com/goccy/go-yaml"
 	"github.com/pkg/errors"
 
-	"mgo/embed"
+	"fastcdn/embed"
 )
 
 var appConfig AppConfig

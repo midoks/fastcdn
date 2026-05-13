@@ -3,7 +3,7 @@ package db
 import (
 	"github.com/pkg/errors"
 
-	"mgo/internal/model"
+	"fastcdn/internal/model"
 )
 
 func GetClusterNodeLogsListByID(node_id int64, page, size int) ([]model.ClusterNodeLogs, int64, error) {

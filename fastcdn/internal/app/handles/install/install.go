@@ -6,11 +6,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"mgo/internal/app/common"
-	"mgo/internal/conf"
-	"mgo/internal/db"
-	"mgo/internal/log"
-	"mgo/internal/op"
+	"fastcdn/internal/app/common"
+	"fastcdn/internal/conf"
+	"fastcdn/internal/db"
+	"fastcdn/internal/log"
+	"fastcdn/internal/op"
 )
 
 func HomePage(c *gin.Context) {

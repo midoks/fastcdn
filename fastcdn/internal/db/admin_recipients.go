@@ -4,8 +4,8 @@ import (
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 
-	"mgo/internal/app/entity"
-	"mgo/internal/model"
+	"fastcdn/internal/app/entity"
+	"fastcdn/internal/model"
 )
 
 func GetAdminRecipientsList(page, size int) ([]entity.AdminRecipientsEntityList, int64, error) {

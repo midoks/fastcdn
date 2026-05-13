@@ -5,9 +5,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"mgo/internal/app/common"
-	"mgo/internal/app/form"
-	"mgo/internal/db"
+	"fastcdn/internal/app/common"
+	"fastcdn/internal/app/form"
+	"fastcdn/internal/db"
 )
 
 func Clean(c *gin.Context) {

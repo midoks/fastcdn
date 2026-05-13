@@ -4,9 +4,9 @@ import (
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 
-	"mgo/internal/app/entity"
-	"mgo/internal/app/form"
-	"mgo/internal/model"
+	"fastcdn/internal/app/entity"
+	"fastcdn/internal/app/form"
+	"fastcdn/internal/model"
 )
 
 func GetClusterNodeListByArgs(field form.ClusterNodeList) ([]entity.ClusterNodeEntityList, int64, error) {

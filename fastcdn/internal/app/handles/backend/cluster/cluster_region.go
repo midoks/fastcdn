@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"mgo/internal/app/common"
-	"mgo/internal/app/form"
-	"mgo/internal/db"
+	"fastcdn/internal/app/common"
+	"fastcdn/internal/app/form"
+	"fastcdn/internal/db"
 
 	"github.com/gin-gonic/gin"
 )

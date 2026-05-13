@@ -3,7 +3,7 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 
-	"mgo/internal/conf"
+	"fastcdn/internal/conf"
 )
 
 func CheckInstalledAfter() gin.HandlerFunc {

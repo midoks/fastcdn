@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 
-	"mgo/internal/model"
+	"fastcdn/internal/model"
 )
 
 func GetLogList(page, size int) ([]model.Log, int64, error) {

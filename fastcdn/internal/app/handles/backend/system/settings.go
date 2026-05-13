@@ -7,11 +7,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"mgo/internal/app/common"
-	"mgo/internal/app/form"
-	"mgo/internal/db"
-	"mgo/internal/model"
-	utils "mgo/internal/utils"
+	"fastcdn/internal/app/common"
+	"fastcdn/internal/app/form"
+	"fastcdn/internal/db"
+	"fastcdn/internal/model"
+	utils "fastcdn/internal/utils"
 )
 
 func GetSysBaseSubMenu() []form.SubMenu {

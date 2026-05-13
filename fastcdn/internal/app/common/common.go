@@ -8,10 +8,10 @@ import (
 	"net/http"
 	// "strings"
 
-	"mgo/internal/conf"
-	"mgo/internal/db"
+	"fastcdn/internal/conf"
+	"fastcdn/internal/db"
 
-	// utils "mgo/internal/utils"
+	// utils "fastcdn/internal/utils"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"mgo/internal/model"
+	"fastcdn/internal/model"
 )
 
 func GetClusterNodeIpaddrByNodeID(node_id int64) ([]model.ClusterNodeIpaddr, error) {

@@ -14,17 +14,17 @@ import (
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 
-	"mgo/embed"
-	"mgo/internal/app/handles"
-	api_logs "mgo/internal/app/handles/api/logs"
-	backend "mgo/internal/app/handles/backend"
-	backend_admin "mgo/internal/app/handles/backend/admin"
-	backend_cluster "mgo/internal/app/handles/backend/cluster"
-	backend_log "mgo/internal/app/handles/backend/log"
-	backend_system "mgo/internal/app/handles/backend/system"
-	"mgo/internal/app/handles/install"
-	"mgo/internal/app/middleware"
-	"mgo/internal/conf"
+	"fastcdn/embed"
+	"fastcdn/internal/app/handles"
+	api_logs "fastcdn/internal/app/handles/api/logs"
+	backend "fastcdn/internal/app/handles/backend"
+	backend_admin "fastcdn/internal/app/handles/backend/admin"
+	backend_cluster "fastcdn/internal/app/handles/backend/cluster"
+	backend_log "fastcdn/internal/app/handles/backend/log"
+	backend_system "fastcdn/internal/app/handles/backend/system"
+	"fastcdn/internal/app/handles/install"
+	"fastcdn/internal/app/middleware"
+	"fastcdn/internal/conf"
 )
 
 func initTemp(r *gin.Engine) {

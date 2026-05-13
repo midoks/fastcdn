@@ -7,9 +7,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"mgo/internal/app/common"
-	"mgo/internal/db"
-	// "mgo/internal/op"
+	"fastcdn/internal/app/common"
+	"fastcdn/internal/db"
+	// "fastcdn/internal/op"
 )
 
 func Update(c *gin.Context) {

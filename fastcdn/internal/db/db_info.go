@@ -11,8 +11,8 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
-	"mgo/internal/conf"
-	"mgo/internal/model"
+	"fastcdn/internal/conf"
+	"fastcdn/internal/model"
 )
 
 type DbInfo struct {

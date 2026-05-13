@@ -13,7 +13,7 @@ import (
 
 	go_logger "github.com/phachon/go-logger"
 
-	"mgo/internal/conf"
+	"fastcdn/internal/conf"
 )
 
 var (

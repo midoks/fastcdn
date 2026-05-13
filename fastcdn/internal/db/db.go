@@ -17,9 +17,9 @@ import (
 	"gorm.io/gorm/schema"
 	_ "modernc.org/sqlite"
 
-	"mgo/internal/conf"
-	"mgo/internal/model"
-	utils "mgo/internal/utils"
+	"fastcdn/internal/conf"
+	"fastcdn/internal/model"
+	utils "fastcdn/internal/utils"
 )
 
 var db *gorm.DB

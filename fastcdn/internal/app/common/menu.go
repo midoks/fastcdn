@@ -3,7 +3,7 @@ package common
 import (
 	"encoding/json"
 	"fmt"
-	"mgo/embed"
+	"fastcdn/embed"
 	"strings"
 	"sync"
 )

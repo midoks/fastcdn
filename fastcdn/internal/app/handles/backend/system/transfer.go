@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"mgo/internal/app/common"
+	"fastcdn/internal/app/common"
 )
 
 type StepItem struct {

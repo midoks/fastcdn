@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"mgo/internal/app/common"
-	"mgo/internal/db"
+	"fastcdn/internal/app/common"
+	"fastcdn/internal/db"
 )
 
 func ClusterSettingsHealth(c *gin.Context) {

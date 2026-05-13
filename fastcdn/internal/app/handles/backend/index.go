@@ -8,10 +8,10 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 
-	"mgo/internal/app/common"
-	"mgo/internal/conf"
-	"mgo/internal/db"
-	// "mgo/internal/op"
+	"fastcdn/internal/app/common"
+	"fastcdn/internal/conf"
+	"fastcdn/internal/db"
+	// "fastcdn/internal/op"
 )
 
 type LoginReq struct {

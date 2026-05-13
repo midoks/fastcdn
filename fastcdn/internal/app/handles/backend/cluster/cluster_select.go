@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"mgo/internal/app/common"
-	"mgo/internal/db"
+	"fastcdn/internal/app/common"
+	"fastcdn/internal/db"
 )
 
 func SelectIp(c *gin.Context) {

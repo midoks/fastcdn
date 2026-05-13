@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 
-	"mgo/internal/model"
+	"fastcdn/internal/model"
 )
 
 func GetAdminRecipientsClusterRelatedByRecipientID(recipient_id int64) ([]model.AdminRecipientsClusterRelated, error) {

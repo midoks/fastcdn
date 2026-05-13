@@ -9,13 +9,13 @@ import (
 
 	"github.com/urfave/cli"
 
-	"mgo/internal/cmd"
-	"mgo/internal/conf"
+	"fastcdn/internal/cmd"
+	"fastcdn/internal/conf"
 )
 
 const (
 	Version = "1.0"
-	AppName = "mgo"
+	AppName = "fastcdn"
 	CodeDev = false
 )
 

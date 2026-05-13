@@ -7,10 +7,10 @@ import (
 	// "github.com/pkg/errors"
 	// "gorm.io/gorm"
 
-	"mgo/internal/conf"
-	"mgo/internal/db"
-	// "mgo/internal/model"
-	// utils "mgo/internal/utils"
+	"fastcdn/internal/conf"
+	"fastcdn/internal/db"
+	// "fastcdn/internal/model"
+	// utils "fastcdn/internal/utils"
 )
 
 func AddLog(uid int64, content string) error {

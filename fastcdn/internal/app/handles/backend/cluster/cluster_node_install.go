@@ -12,11 +12,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"mgo/internal/app/common"
-	"mgo/internal/app/form"
-	"mgo/internal/db"
-	"mgo/internal/model"
-	"mgo/internal/ssh"
+	"fastcdn/internal/app/common"
+	"fastcdn/internal/app/form"
+	"fastcdn/internal/db"
+	"fastcdn/internal/model"
+	"fastcdn/internal/ssh"
 )
 
 // 安装状态结构体

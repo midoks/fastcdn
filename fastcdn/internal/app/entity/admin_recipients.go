@@ -1,7 +1,7 @@
 package entity
 
 import (
-	"mgo/internal/model"
+	"fastcdn/internal/model"
 )
 
 type AdminRecipientsEntityList struct {

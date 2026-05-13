@@ -6,9 +6,9 @@ import (
 
 	"gorm.io/gorm"
 
-	"mgo/internal/app/entity"
-	"mgo/internal/model"
-	"mgo/internal/utils/cache"
+	"fastcdn/internal/app/entity"
+	"fastcdn/internal/model"
+	"fastcdn/internal/utils/cache"
 
 	"github.com/pkg/errors"
 )

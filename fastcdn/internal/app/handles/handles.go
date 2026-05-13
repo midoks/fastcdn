@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"mgo/internal/app/common"
-	"mgo/internal/conf"
+	"fastcdn/internal/app/common"
+	"fastcdn/internal/conf"
 )
 
 func AdminPage(c *gin.Context) {

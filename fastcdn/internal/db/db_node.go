@@ -3,7 +3,7 @@ package db
 import (
 	"github.com/pkg/errors"
 
-	"mgo/internal/model"
+	"fastcdn/internal/model"
 )
 
 func GetDbNodeList(page, size int) ([]model.DbNode, int64, error) {

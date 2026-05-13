@@ -3,7 +3,7 @@ package db
 import (
 	"github.com/pkg/errors"
 
-	"mgo/internal/model"
+	"fastcdn/internal/model"
 )
 
 func GetAdminLogsList(page, size int) ([]model.AdminLogs, int64, error) {
