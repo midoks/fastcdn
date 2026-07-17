@@ -13,6 +13,8 @@ type Config struct {
 	PrimaryAddr        string
 	BackupAddr         string
 	HealthCheckInterval int
+	SyncInterval       int
+	SyncType           string
 }
 
 func ParseConfig() *Config {
@@ -26,6 +28,8 @@ func ParseConfig() *Config {
 	flag.StringVar(&config.PrimaryAddr, "primary-addr", "", "Primary DNS address (for backup)")
 	flag.StringVar(&config.BackupAddr, "backup-addr", "", "Backup DNS address (for primary)")
 	flag.IntVar(&config.HealthCheckInterval, "health-check-interval", 10, "Health check interval in seconds")
+	flag.IntVar(&config.SyncInterval, "sync-interval", 300, "Zone sync interval in seconds (for AXFR/IXFR)")
+	flag.StringVar(&config.SyncType, "sync-type", "ixfr", "Zone sync type: axfr or ixfr")
 
 	flag.Parse()
 

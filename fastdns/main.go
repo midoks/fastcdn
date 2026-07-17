@@ -23,11 +23,10 @@ func main() {
 
 	dnsServer.zoneStore.StartSyncServer(config.SyncPort)
 
+	var zoneSync *ZoneSync
 	if config.Role == "backup" && config.PrimaryAddr != "" {
-		log.Printf("Syncing zone data from primary: %s", config.PrimaryAddr)
-		if err := dnsServer.zoneStore.SyncFromPrimary(config.PrimaryAddr); err != nil {
-			log.Printf("Failed to sync from primary: %s", err.Error())
-		}
+		zoneSync = NewZoneSync(dnsServer, config.PrimaryAddr, config.SyncInterval, config.SyncType)
+		zoneSync.Start()
 	}
 
 	registerDefaultRecords(dnsServer.zoneStore)
@@ -46,18 +45,32 @@ func main() {
 	<-sigChan
 
 	log.Println("Shutting down fastdns...")
+	if zoneSync != nil {
+		zoneSync.Stop()
+	}
 	dnsServer.Stop()
 	log.Println("fastdns stopped")
 }
 
 func registerDefaultRecords(zs *ZoneStore) {
+	zs.AddSOA("example.com.", SOARecord{
+		Ns:      "ns1.example.com.",
+		Mbox:    "admin.example.com.",
+		Serial:  2024010100,
+		Refresh: 3600,
+		Retry:   900,
+		Expire:  604800,
+		Minttl:  86400,
+		TTL:     3600,
+	})
+
+	zs.AddNS("example.com.", "ns1.example.com.", 3600)
+	zs.AddNS("example.com.", "ns2.example.com.", 3600)
 	zs.AddA("example.com.", net.ParseIP("192.168.1.100"), 3600)
 	zs.AddA("example.com.", net.ParseIP("192.168.1.101"), 3600)
 	zs.AddAAAA("example.com.", net.ParseIP("::1"), 3600)
 	zs.AddCNAME("www.example.com.", "example.com.", 3600)
 	zs.AddMX("example.com.", 10, "mail.example.com.", 3600)
-	zs.AddNS("example.com.", "ns1.example.com.", 3600)
-	zs.AddNS("example.com.", "ns2.example.com.", 3600)
 	zs.AddTXT("example.com.", []string{"v=spf1 include:_spf.example.com ~all"}, 3600)
 
 	log.Println("Default DNS records registered")
